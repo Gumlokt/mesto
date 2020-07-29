@@ -1,0 +1,18 @@
+.profile__btn-add {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  width: 150px;
+  height: 50px;
+  border: 2px solid #fff;
+  border-radius: 2px;
+  background-color: transparent;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile__btn-add:hover {
+  cursor: pointer;
+}
