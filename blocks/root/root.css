@@ -2,7 +2,7 @@
   min-width: 320px;
   box-sizing: border-box;
   margin: 0 auto;
-  padding: 0;
+  padding: 0 199px;
   max-width: 1280px;
   color: #fff;
   font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
@@ -18,5 +18,29 @@
 @supports (font-variation-settings: normal) {
   .root {
     font-family: 'Inter var', sans-serif;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .root {
+    padding: 0 calc((100% - 282px*3 - 18px*2)/2);
+  }
+}
+
+@media screen and (max-width: 920px) {
+  .root {
+    padding: 0 calc((100% - 282px*2 - 18px)/2);
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .root {
+    padding: 0 calc((100% - 282px)/2);
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .root {
+    padding: 0 19px;
   }
 }

@@ -5,3 +5,16 @@
   display: flex;
   align-items: center;
 }
+
+@media screen and (max-width: 920px) {
+  .profile__data {
+    margin: 0 0 36px;
+  }
+}
+
+@media screen and (max-width: 620px) {
+  .profile__data {
+    flex-direction: column;
+    align-items: center;
+  }
+}
