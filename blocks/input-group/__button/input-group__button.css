@@ -1,0 +1,25 @@
+.input-group__button {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  height: 50px;
+  background-color: #000;
+  border: 0 solid #000;
+  border-radius: 2px;
+  color: #ffffff;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: center;
+}
+
+.input-group__button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+@media screen and (max-width: 620px) {
+  .input-group__button {
+    height: 40px;
+    font-size: 14px;
+    line-height: 17px;
+  }
+}

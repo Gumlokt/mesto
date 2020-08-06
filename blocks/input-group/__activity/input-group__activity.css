@@ -1,0 +1,21 @@
+.input-group__activity {
+  box-sizing: border-box;
+  margin: 0 0 48px;
+  padding: 0;
+  color: #C4C4C4;
+  height: 27px;
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  outline: 0;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+@media screen and (max-width: 620px) {
+  .input-group__activity {
+    margin: 0 0 36px;
+    height: 24px;
+    font-size: 12px;
+    line-height: 15px;
+  }
+}

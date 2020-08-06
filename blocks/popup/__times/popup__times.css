@@ -1,0 +1,26 @@
+.popup__times {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  top: -42px;
+  right: -42px;
+  transition: transform .5s ease;
+}
+
+.popup__times:hover {
+  cursor: pointer;
+  opacity: .6;
+  transform: rotate(90deg);
+}
+
+@media screen and (max-width: 620px) {
+  .popup__times {
+    width: 42px;
+    height: 42px;
+    top: -33px;
+    right: -33px;
+  }
+}
