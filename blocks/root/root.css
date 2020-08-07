@@ -22,12 +22,6 @@
 
 @media screen and (max-width: 620px) {
   .root {
-    padding: 0 calc((100% - 282px)/2);
-  }
-}
-
-@media screen and (max-width: 320px) {
-  .root {
-    padding: 0 19px;
+    padding: 0;
   }
 }

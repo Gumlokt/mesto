@@ -1,8 +1,7 @@
-.input-group__activity {
+.input-group__text-input {
   box-sizing: border-box;
-  margin: 0 0 48px;
+  margin: 0 0 29px;
   padding: 0;
-  color: #C4C4C4;
   height: 27px;
   border: 0;
   border-bottom: 1px solid rgba(0, 0, 0, .2);
@@ -11,10 +10,14 @@
   line-height: 17px;
 }
 
+.input-group__text-input:focus {
+  border-bottom: 1px solid rgba(0, 0, 0, .6);
+}
+
 @media screen and (max-width: 620px) {
-  .input-group__activity {
-    margin: 0 0 36px;
+  .input-group__text-input {
     height: 24px;
+    margin: 0 0 20px;
     font-size: 12px;
     line-height: 15px;
   }

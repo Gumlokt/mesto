@@ -24,7 +24,7 @@
     <main class="content">
       <section class="profile">
         <div class="profile__data">
-          <img src="./images/cousteau.jpg" alt="Аватарка (фото) Жак-Ива Кусто" class="profile__avatar">
+          <img src="./images/cousteau.jpg" alt="Аватарка (фото) владельца профиля" class="profile__avatar">
 
           <div class="profile__info">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -45,38 +45,38 @@
 
       <section class="elements">
         <div class="element">
-          <img src="./images/elbrus.webp" alt="Фото горы Эльбрус" class="element__image">
+          <img src="./images/elbrus.jpg" alt="Фото горы Эльбрус" class="element__image">
 
           <div class="elment__footer">
             <h2 class="element__title">Эльбрус</h2>
-            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="icon-heart">
+            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="element__icon">
           </div>
         </div>
 
         <div class="element">
-          <img src="./images/dombay.webp" alt="Фото заснеженного Домбая" class="element__image">
+          <img src="./images/dombay.jpg" alt="Фото заснеженных гор Домбая" class="element__image">
 
           <div class="elment__footer">
             <h2 class="element__title">Домбай</h2>
-            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="icon-heart">
+            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="element__icon">
           </div>
         </div>
 
         <div class="element">
-          <img src="./images/arkhiz.webp" alt="Фото леса в Архызе" class="element__image">
+          <img src="./images/arkhiz.jpg" alt="Фото леса в Архызе" class="element__image">
 
           <div class="elment__footer">
             <h2 class="element__title">Архыз</h2>
-            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="icon-heart">
+            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="element__icon">
           </div>
         </div>
 
         <div class="element">
-          <img src="./images/bermamyt.webp" alt="Фото палто Бермамыт" class="element__image">
+          <img src="./images/bermamyt.jpg" alt="Фото палто Бермамыт" class="element__image">
 
           <div class="elment__footer">
             <h2 class="element__title">Плато Бермамыт</h2>
-            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="icon-heart">
+            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="element__icon">
           </div>
         </div>
 
@@ -85,7 +85,7 @@
 
           <div class="elment__footer">
             <h2 class="element__title">Сентинский храм</h2>
-            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="icon-heart">
+            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="element__icon">
           </div>
         </div>
 
@@ -94,7 +94,7 @@
 
           <div class="elment__footer">
             <h2 class="element__title">Бадукское озеро</h2>
-            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="icon-heart">
+            <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="element__icon">
           </div>
         </div>
       </section>
@@ -103,9 +103,12 @@
 
 
     <footer class="footer">
-      <p class="footer__copyright">© 2020 Mesto Russia</p>
+      <p class="footer__copyright">&copy; 2020 Mesto Russia</p>
     </footer>
   </div>
+
+
+
   <div class="popup">
     <div class="popup__container">
       <img src="./images/icons/icon-times.svg" alt="Иконка для закрытия попапа" class="popup__times">
@@ -113,13 +116,17 @@
       <div class="input-group">
         <h2 class="input-group__title">Редактировать профиль</h2>
 
-        <input type="text" class="input-group__name" name="name" placeholder="Имя деятеля">
+        <input type="text" class="input-group__text-input" name="name" value="" placeholder="Имя деятеля">
 
-        <input type="text" class="input-group__activity" name="activity" placeholder="Деятельность">
+        <input type="text" class="input-group__text-input" name="activity" value="" placeholder="Деятельность">
 
-        <button class="input-group__button">Сохранить</button>
+        <button class="input-group__btn-save">Сохранить</button>
       </div>
     </div>
   </div>
+
+
+
+  <script src="./pages/index.js"></script>
 </body>
 </html>

@@ -5,13 +5,13 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(min-content, max-content));
   grid-template-rows: min-content;
-  gap: 16px 17px;
+  gap: 3px 18px;
   place-items: center start;
 }
 
 @media screen and (max-width: 620px) {
   .profile__info {
-    gap: 14px 17px;
+    gap: 0 7px;
     place-items: center center;
   }
 }

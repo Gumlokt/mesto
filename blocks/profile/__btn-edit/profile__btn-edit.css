@@ -1,6 +1,6 @@
 .profile__btn-edit {
   box-sizing: border-box;
-  margin: 0;
+  margin: 0 20px 0 0;
   padding: 0;
   width: 24px;
   height: 24px;
@@ -14,6 +14,12 @@
 .profile__btn-edit:hover {
   cursor: pointer;
   opacity: .6;
+}
+
+@media screen and (max-width: 920px) {
+  .profile__btn-edit {
+    margin: 0;
+  }
 }
 
 @media screen and (max-width: 620px) {

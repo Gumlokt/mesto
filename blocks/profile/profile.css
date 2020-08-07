@@ -1,7 +1,7 @@
 .profile {
   box-sizing: border-box;
   margin: 0;
-  padding: 40px 0 50px;
+  padding: 40px 0 51px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,6 +16,7 @@
 
 @media screen and (max-width: 620px) {
   .profile {
+    padding: 40px 0 35px;
     align-items: center;
   }
 }

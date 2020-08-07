@@ -1,7 +1,8 @@
 .elment__footer {
   box-sizing: border-box;
-  margin: 25px 15px 31px 21px;
+  margin: 22px 18px 31px 21px;
   padding: 0;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }

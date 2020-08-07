@@ -1,4 +1,4 @@
-.input-group__button {
+.input-group__btn-save {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -12,12 +12,12 @@
   text-align: center;
 }
 
-.input-group__button:hover {
+.input-group__btn-save:hover {
   background-color: rgba(0, 0, 0, 0.8);
 }
 
 @media screen and (max-width: 620px) {
-  .input-group__button {
+  .input-group__btn-save {
     height: 40px;
     font-size: 14px;
     line-height: 17px;

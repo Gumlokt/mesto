@@ -19,5 +19,7 @@
 @media screen and (max-width: 620px) {
   .elements {
     grid-template-columns: 1fr;
+    gap: 20px;
+    justify-items: center;
   }
 }
