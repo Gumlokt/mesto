@@ -1,59 +1,49 @@
+// All variables
 let profileName = document.querySelector('.profile__name');
 let profileActivity = document.querySelector('.profile__activity');
 
-let inputName = document.querySelector('.input-group__text-input[name="name"]');
-let inputActivity = document.querySelector('.input-group__text-input[name="activity"]');
-
-
-// Catch event: Click 'Edit' button
 let btnEdit = document.querySelector('.profile__btn-edit');
-let popup = document.querySelector('.popup');
+let popupWindow = document.querySelector('.popup');
 
-btnEdit.addEventListener('click', function () {
-  popup.classList.add('popup_opened');
+let btnClose = popupWindow.querySelector('.popup__btn-close');
 
-  inputName.value = profileName.textContent;
-  inputActivity.value = profileActivity.textContent;
-});
+let profileForm = popupWindow.querySelector('.input-group[name="profile"]');
 
-
-// Catch event: Click 'Close' icon
-let popupTimes = document.querySelector('.popup__times');
-
-popupTimes.addEventListener('click', function () {
-  popup.classList.remove('popup_opened');
-
-  inputName.value = '';
-  inputActivity.value = '';
-});
+let inputName = profileForm.querySelector('.input-group__text-input[name="name"]');
+let inputActivity = profileForm.querySelector('.input-group__text-input[name="activity"]');
 
 
-// Catch event: Click 'Save' button
-let btnSave = document.querySelector('.input-group__btn-save');
-btnSave.addEventListener('click', saveProfile);
 
+// Function definition: Open/Close popup window with form
+function togglePopupForm() {
+  if(popupWindow.classList.contains('popup_opened')) {
+    popupWindow.classList.remove('popup_opened');
 
-// Catch event: press Enter on keyboard
-inputName.addEventListener('keydown', function(e) {
-  if (e.keyCode === 13) {
-    saveProfile();
+    inputName.value = '';
+    inputActivity.value = '';
+  } else {
+    inputName.value = profileName.textContent;
+    inputActivity.value = profileActivity.textContent;
+
+    popupWindow.classList.add('popup_opened');
   }
-});
+}
 
-inputActivity.addEventListener('keydown', function(e) {
-  if (e.keyCode === 13) {
-    saveProfile();
-  }
-});
-
-
-// Function definition: Save Profile
-function saveProfile() {
-  popup.classList.remove('popup_opened');
+// Function definition: Save Profile and close popup
+function saveProfile(e) {
+  e.preventDefault();
 
   profileName.textContent = inputName.value;
   profileActivity.textContent = inputActivity.value;
 
-  inputName.value = '';
-  inputActivity.value = '';
+  togglePopupForm();
 }
+
+
+
+// Catch events:
+btnEdit.addEventListener('click', togglePopupForm); // Click 'Edit' button
+
+btnClose.addEventListener('click', togglePopupForm); // Click 'Close' button
+
+profileForm.addEventListener('submit', saveProfile); // Click 'Save' button or submit the form by pressing Enter

@@ -9,6 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: opacity .4s linear;
 }
 
 .profile__btn-edit:hover {

@@ -1,4 +1,4 @@
-.popup__times {
+.popup__btn-close {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -7,17 +7,23 @@
   height: 56px;
   top: -44px;
   right: -44px;
+  border: 0;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(45deg);
   transition: transform .5s ease;
 }
 
-.popup__times:hover {
+.popup__btn-close:hover {
   cursor: pointer;
   opacity: .6;
-  transform: rotate(90deg);
+  transform: rotate(135deg);
 }
 
 @media screen and (max-width: 620px) {
-  .popup__times {
+  .popup__icon-times {
     width: 42px;
     height: 42px;
     top: -33px;

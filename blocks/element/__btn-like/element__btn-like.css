@@ -1,0 +1,18 @@
+.element__btn-like {
+  box-sizing: border-box;
+  margin: 0 0 0 10px;
+  padding: 0;
+  width: 21px;
+  height: 19px;
+  border: 0;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity .4s linear;
+}
+
+.element__btn-like:hover {
+  cursor: pointer;
+  opacity: .6;
+}
