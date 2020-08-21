@@ -34,18 +34,26 @@ let profileName = document.querySelector('.profile__name');
 let profileActivity = document.querySelector('.profile__activity');
 
 let btnEdit = document.querySelector('.profile__btn-edit');
-let popupWindow = document.querySelector('.popup');
+let btnAdd = document.querySelector('.profile__btn-add');
 
-let btnClose = popupWindow.querySelector('.popup__btn-close');
 
-let profileForm = popupWindow.querySelector('.input-group[name="profile"]');
-
+let profileForm = document.querySelector('.input-group[name="profile"]');
+let profileWindow = profileForm.parentElement.parentElement;
+let btnProfileClose = profileForm.previousElementSibling;
 let inputName = profileForm.querySelector('.input-group__text-input[name="name"]');
 let inputActivity = profileForm.querySelector('.input-group__text-input[name="activity"]');
 
+let articleForm = document.querySelector('.input-group[name="article"]');
+let articleWindow = articleForm.parentElement.parentElement;
+let btnArticleClose = articleForm.previousElementSibling;
+let inputTitle = profileForm.querySelector('.input-group__text-input[name="title"]');
+let inputLink = profileForm.querySelector('.input-group__text-input[name="link"]');
 
 
 
+
+
+// Fill up articles
 for (let i = 0; i < elementsArray.length; i++) {
   const element = elementTemplate.cloneNode(true);
 
@@ -55,10 +63,12 @@ for (let i = 0; i < elementsArray.length; i++) {
   elements.append(element);
 }
 
-// Function definition: Open/Close popup window with form
-function togglePopupForm() {
-  if(popupWindow.classList.contains('popup_opened')) {
-    popupWindow.classList.remove('popup_opened');
+
+
+// Function definition: Open/Close popup window with profile form
+function toggleProfileForm() {
+  if(profileWindow.classList.contains('popup_opened')) {
+    profileWindow.classList.remove('popup_opened');
 
     inputName.value = '';
     inputActivity.value = '';
@@ -66,7 +76,7 @@ function togglePopupForm() {
     inputName.value = profileName.textContent;
     inputActivity.value = profileActivity.textContent;
 
-    popupWindow.classList.add('popup_opened');
+    profileWindow.classList.add('popup_opened');
   }
 }
 
@@ -77,14 +87,41 @@ function saveProfile(e) {
   profileName.textContent = inputName.value;
   profileActivity.textContent = inputActivity.value;
 
-  togglePopupForm();
+  toggleProfileForm();
+}
+
+
+// Function definition: Open/Close popup window with article form
+function toggleArticleForm() {
+  if(articleWindow.classList.contains('popup_opened')) {
+    articleWindow.classList.remove('popup_opened');
+
+    inputTitle.value = '';
+    inputLink.value = '';
+  } else {
+    articleWindow.classList.add('popup_opened');
+  }
+}
+
+// Function definition: Save Article and close popup
+function saveArticle(e) {
+  e.preventDefault();
+
+  // code to prepend article to other articles ...
+
+  toggleArticleForm();
 }
 
 
 
 // Catch events:
-btnEdit.addEventListener('click', togglePopupForm); // Click 'Edit' button
+btnEdit.addEventListener('click', toggleProfileForm); // Click 'Edit' button
 
-btnClose.addEventListener('click', togglePopupForm); // Click 'Close' button
+btnProfileClose.addEventListener('click', toggleProfileForm); // Click 'Close' button
 
 profileForm.addEventListener('submit', saveProfile); // Click 'Save' button or submit the form by pressing Enter
+
+
+btnAdd.addEventListener('click', toggleArticleForm); // Click 'Add' button
+
+btnArticleClose.addEventListener('click', toggleArticleForm); // Click 'Close' button
