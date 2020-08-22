@@ -36,6 +36,10 @@ let profileActivity = document.querySelector('.profile__activity');
 let btnEdit = document.querySelector('.profile__btn-edit');
 let btnAdd = document.querySelector('.profile__btn-add');
 
+let btnLike; // Array of buttons with heart icon
+let emptyHeartIcon  = './images/icons/icon-heart.svg';
+let filledHeartIcon = './images/icons/icon-heart-filled.svg';
+
 
 let profileForm = document.querySelector('.input-group[name="profile"]');
 let profileWindow = profileForm.parentElement.parentElement;
@@ -63,6 +67,7 @@ for (let i = 0; i < elementsArray.length; i++) {
   elements.append(element);
 }
 
+btnLike = document.querySelectorAll('.element__btn-like');
 
 
 // Function definition: Open/Close popup window with profile form
@@ -79,6 +84,7 @@ function toggleProfileForm() {
     profileWindow.classList.add('popup_opened');
   }
 }
+
 
 // Function definition: Save Profile and close popup
 function saveProfile(e) {
@@ -103,11 +109,11 @@ function toggleArticleForm() {
   }
 }
 
+
 // Function definition: Save Article and close popup
 function saveArticle(e) {
   e.preventDefault();
 
-  // code to prepend article to other articles ...
   const element = elementTemplate.cloneNode(true);
 
   element.querySelector('.element__image').src = inputLink.value;
@@ -115,7 +121,20 @@ function saveArticle(e) {
 
   elements.prepend(element);
 
+  btnLike = document.querySelectorAll('.element__btn-like'); // Refresh/update Array of buttons with heart icon
+  btnLike.forEach(element => element.addEventListener('click', toggleLike)); // Reattach/refresh click event to 'Add' buttons
+
   toggleArticleForm();
+}
+
+
+// Function definition: Set/unset 'like' to the card
+function toggleLike(e) {
+  if(e.target.getAttribute('src') === emptyHeartIcon) {
+    e.target.setAttribute('src', filledHeartIcon);
+  } else {
+    e.target.setAttribute('src', emptyHeartIcon);
+  }
 }
 
 
@@ -133,3 +152,6 @@ btnAdd.addEventListener('click', toggleArticleForm); // Click 'Add' button
 btnArticleClose.addEventListener('click', toggleArticleForm); // Click 'Close' button
 
 articleForm.addEventListener('submit', saveArticle); // Click 'Save' button or submit the Article form by pressing Enter
+
+
+btnLike.forEach(element => element.addEventListener('click', toggleLike)); // Attach click event to 'Add' buttons
