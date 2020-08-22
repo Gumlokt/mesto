@@ -39,8 +39,8 @@ let btnAdd = document.querySelector('.profile__btn-add');
 let btnRemove; // Array of buttons with trash icon
 
 let btnLike; // Array of buttons with heart icon
-let emptyHeartIcon  = './images/icons/icon-heart.svg';
-let filledHeartIcon = './images/icons/icon-heart-filled.svg';
+const emptyHeartIcon  = './images/icons/icon-heart.svg';
+const filledHeartIcon = './images/icons/icon-heart-filled.svg';
 
 
 const profileForm = document.querySelector('.input-group[name="profile"]');
@@ -66,20 +66,40 @@ let popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
 
 
 
-// Function definition: Open/Close popup window with zoomed image
-function toggleImageWindow() {
-  if(imageWindow.classList.contains('popup_opened')) {
-    imageWindow.classList.remove('popup_opened');
-  } else {
-    imageWindow.classList.add('popup_opened');
+// Function definition: Helper function to check if popup window is opened
+function isOpened(popupWindow) {
+  if(popupWindow.classList.contains('popup_opened')) {
+    return true;
   }
+
+  return false;
+}
+
+
+// Function definition: Function to add 'popup_opened' and 'fade-in' classes
+function fadeIn(windowToOpen) {
+  windowToOpen.classList.add('popup_opened', 'fade-in');
+}
+
+
+// Function definition: Fade out function
+function fadeOut(windowToClose) {
+  window.setTimeout(() => { closePopup(windowToClose); }, 590);
+  windowToClose.classList.add('fade-out');
+}
+
+
+// Function definition: Function to remove 'popup_opened', 'fade-in' and 'fade-out' classes
+function closePopup(windowToClose) {
+  windowToClose.classList.remove('popup_opened', 'fade-in', 'fade-out');
 }
 
 
 // Function definition: Open/Close popup window with profile form
 function toggleProfileForm() {
-  if(profileWindow.classList.contains('popup_opened')) {
-    profileWindow.classList.remove('popup_opened');
+  // if(profileWindow.classList.contains('popup_opened')) {
+  if(isOpened(profileWindow)) {
+    fadeOut(profileWindow);
 
     inputName.value = '';
     inputActivity.value = '';
@@ -87,7 +107,7 @@ function toggleProfileForm() {
     inputName.value = profileName.textContent;
     inputActivity.value = profileActivity.textContent;
 
-    profileWindow.classList.add('popup_opened');
+    fadeIn(profileWindow);
   }
 }
 
@@ -105,13 +125,13 @@ function saveProfile(e) {
 
 // Function definition: Open/Close popup window with article form
 function toggleArticleForm() {
-  if(articleWindow.classList.contains('popup_opened')) {
-    articleWindow.classList.remove('popup_opened');
+  if(isOpened(articleWindow)) {
+    fadeOut(articleWindow);
 
     inputTitle.value = '';
     inputLink.value = '';
   } else {
-    articleWindow.classList.add('popup_opened');
+    fadeIn(articleWindow);
   }
 }
 
@@ -142,7 +162,17 @@ function saveArticle(e) {
 }
 
 
-// Function definition: Zoom image
+// Function definition: Open/Close popup window with full sized image
+function toggleImageWindow() {
+  if(isOpened(imageWindow)) {
+    fadeOut(imageWindow);
+  } else {
+    fadeIn(imageWindow);
+  }
+}
+
+
+// Function definition: Set image source and image-title to popup window with full sized image
 function zoomImage(e) {
   popupImage.src = e.target.src;
   popupImageTitle.textContent = e.target.parentElement.lastElementChild.firstElementChild.textContent;
@@ -167,6 +197,10 @@ function toggleLike(e) {
 }
 
 
+
+
+
+
 // Fill up articles/cards (or elements in BEM notation)
 for (let i = 0; i < elementsArray.length; i++) {
   const element = elementTemplate.cloneNode(true);
@@ -177,12 +211,11 @@ for (let i = 0; i < elementsArray.length; i++) {
   elements.append(element);
 }
 
-
-
 elementImage = document.querySelectorAll('.element__image'); // fill up the Array of cards' images
 
 btnRemove = document.querySelectorAll('.element__btn-remove'); // fill up the Array of buttons with trash icon
 btnLike = document.querySelectorAll('.element__btn-like'); // fill up the Array of buttons with heart icon
+
 
 
 
@@ -195,11 +228,13 @@ btnProfileClose.addEventListener('click', toggleProfileForm); // Click 'Close' b
 profileForm.addEventListener('submit', saveProfile); // Click 'Save' button or submit the Profile form by pressing Enter
 
 
+
 btnAdd.addEventListener('click', toggleArticleForm); // Click 'Add' button
 
 btnArticleClose.addEventListener('click', toggleArticleForm); // Click 'Close' button
 
 articleForm.addEventListener('submit', saveArticle); // Click 'Save' button or submit the Article form by pressing Enter
+
 
 
 elementImage.forEach(element => element.addEventListener('click', zoomImage)); // Attach click event to card's image

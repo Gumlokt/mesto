@@ -55,3 +55,7 @@
 @import url(../blocks/input-group/__title/input-group__title.css);
 @import url(../blocks/input-group/__text-input/input-group__text-input.css);
 @import url(../blocks/input-group/__btn-save/input-group__btn-save.css);
+
+/* Fade effects */
+@import url(../blocks/fade-in/fade-in.css);
+@import url(../blocks/fade-out/fade-out.css);
