@@ -36,18 +36,20 @@ let profileActivity = document.querySelector('.profile__activity');
 let btnEdit = document.querySelector('.profile__btn-edit');
 let btnAdd = document.querySelector('.profile__btn-add');
 
+let btnRemove; // Array of buttons with trash icon
+
 let btnLike; // Array of buttons with heart icon
 let emptyHeartIcon  = './images/icons/icon-heart.svg';
 let filledHeartIcon = './images/icons/icon-heart-filled.svg';
 
 
-let profileForm = document.querySelector('.input-group[name="profile"]');
+const profileForm = document.querySelector('.input-group[name="profile"]');
 let profileWindow = profileForm.parentElement.parentElement;
 let btnProfileClose = profileForm.previousElementSibling;
 let inputName = profileForm.querySelector('.input-group__text-input[name="name"]');
 let inputActivity = profileForm.querySelector('.input-group__text-input[name="activity"]');
 
-let articleForm = document.querySelector('.input-group[name="article"]');
+const articleForm = document.querySelector('.input-group[name="article"]');
 let articleWindow = articleForm.parentElement.parentElement;
 let btnArticleClose = articleForm.previousElementSibling;
 let inputTitle = articleForm.querySelector('.input-group__text-input[name="title"]');
@@ -55,19 +57,6 @@ let inputLink = articleForm.querySelector('.input-group__text-input[name="link"]
 
 
 
-
-
-// Fill up articles
-for (let i = 0; i < elementsArray.length; i++) {
-  const element = elementTemplate.cloneNode(true);
-
-  element.querySelector('.element__image').src = elementsArray[i].link;
-  element.querySelector('.element__title').textContent = elementsArray[i].name;
-
-  elements.append(element);
-}
-
-btnLike = document.querySelectorAll('.element__btn-like');
 
 
 // Function definition: Open/Close popup window with profile form
@@ -114,17 +103,28 @@ function toggleArticleForm() {
 function saveArticle(e) {
   e.preventDefault();
 
-  const element = elementTemplate.cloneNode(true);
+  if ('' != inputTitle.value && '' != inputLink.value) {
+    const element = elementTemplate.cloneNode(true);
 
-  element.querySelector('.element__image').src = inputLink.value;
-  element.querySelector('.element__title').textContent = inputTitle.value;
+    element.querySelector('.element__title').textContent = inputTitle.value;
+    element.querySelector('.element__image').src = inputLink.value;
 
-  elements.prepend(element);
+    elements.prepend(element);
 
-  btnLike = document.querySelectorAll('.element__btn-like'); // Refresh/update Array of buttons with heart icon
-  btnLike.forEach(element => element.addEventListener('click', toggleLike)); // Reattach/refresh click event to 'Add' buttons
+    btnRemove = document.querySelectorAll('.element__btn-remove'); // Refresh/update Array of buttons with trash icon
+    btnRemove.forEach(element => element.addEventListener('click', removeElement)); // Reattach/refresh click event to 'Remove' buttons
+
+    btnLike = document.querySelectorAll('.element__btn-like'); // Refresh/update Array of buttons with heart icon
+    btnLike.forEach(element => element.addEventListener('click', toggleLike)); // Reattach/refresh click event to 'Add' buttons
+  }
 
   toggleArticleForm();
+}
+
+
+// Function definition: Remove card element
+function removeElement(e) {
+  e.target.parentElement.parentElement.remove()
 }
 
 
@@ -136,6 +136,23 @@ function toggleLike(e) {
     e.target.setAttribute('src', emptyHeartIcon);
   }
 }
+
+
+// Fill up articles/cards (or elements in BEM notation)
+for (let i = 0; i < elementsArray.length; i++) {
+  const element = elementTemplate.cloneNode(true);
+
+  element.querySelector('.element__image').src = elementsArray[i].link;
+  element.querySelector('.element__title').textContent = elementsArray[i].name;
+
+  elements.append(element);
+}
+
+
+
+btnRemove = document.querySelectorAll('.element__btn-remove'); // fill up the Array of buttons with trash icon
+btnLike = document.querySelectorAll('.element__btn-like'); // fill up the Array of buttons with heart icon
+
 
 
 
@@ -153,5 +170,7 @@ btnArticleClose.addEventListener('click', toggleArticleForm); // Click 'Close' b
 
 articleForm.addEventListener('submit', saveArticle); // Click 'Save' button or submit the Article form by pressing Enter
 
+
+btnRemove.forEach(element => element.addEventListener('click', removeElement)); // Attach click event to 'Add' buttons
 
 btnLike.forEach(element => element.addEventListener('click', toggleLike)); // Attach click event to 'Add' buttons
