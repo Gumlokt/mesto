@@ -46,8 +46,8 @@ let inputActivity = profileForm.querySelector('.input-group__text-input[name="ac
 let articleForm = document.querySelector('.input-group[name="article"]');
 let articleWindow = articleForm.parentElement.parentElement;
 let btnArticleClose = articleForm.previousElementSibling;
-let inputTitle = profileForm.querySelector('.input-group__text-input[name="title"]');
-let inputLink = profileForm.querySelector('.input-group__text-input[name="link"]');
+let inputTitle = articleForm.querySelector('.input-group__text-input[name="title"]');
+let inputLink = articleForm.querySelector('.input-group__text-input[name="link"]');
 
 
 
@@ -108,6 +108,12 @@ function saveArticle(e) {
   e.preventDefault();
 
   // code to prepend article to other articles ...
+  const element = elementTemplate.cloneNode(true);
+
+  element.querySelector('.element__image').src = inputLink.value;
+  element.querySelector('.element__title').textContent = inputTitle.value;
+
+  elements.prepend(element);
 
   toggleArticleForm();
 }
@@ -119,9 +125,11 @@ btnEdit.addEventListener('click', toggleProfileForm); // Click 'Edit' button
 
 btnProfileClose.addEventListener('click', toggleProfileForm); // Click 'Close' button
 
-profileForm.addEventListener('submit', saveProfile); // Click 'Save' button or submit the form by pressing Enter
+profileForm.addEventListener('submit', saveProfile); // Click 'Save' button or submit the Profile form by pressing Enter
 
 
 btnAdd.addEventListener('click', toggleArticleForm); // Click 'Add' button
 
 btnArticleClose.addEventListener('click', toggleArticleForm); // Click 'Close' button
+
+articleForm.addEventListener('submit', saveArticle); // Click 'Save' button or submit the Article form by pressing Enter
