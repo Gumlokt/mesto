@@ -26,6 +26,8 @@ const elementsArray = [
   }
 ];
 
+const popupDelay = 590;
+
 let elements = document.querySelector('.elements');
 const elementTemplate = document.querySelector('#element').content;
 
@@ -33,12 +35,12 @@ const elementTemplate = document.querySelector('#element').content;
 let profileName = document.querySelector('.profile__name');
 let profileActivity = document.querySelector('.profile__activity');
 
-let btnEdit = document.querySelector('.profile__btn-edit');
-let btnAdd = document.querySelector('.profile__btn-add');
+const btnEdit = document.querySelector('.profile__btn-edit');
+const btnAdd = document.querySelector('.profile__btn-add');
 
-let btnRemove; // Array of buttons with trash icon
+let removeButtons; // Array of buttons with trash icon
 
-let btnLike; // Array of buttons with heart icon
+let likeButtons; // Array of buttons with heart icon
 const emptyHeartIcon  = './images/icons/icon-heart.svg';
 const filledHeartIcon = './images/icons/icon-heart-filled.svg';
 
@@ -46,21 +48,21 @@ const filledHeartIcon = './images/icons/icon-heart-filled.svg';
 const profileForm = document.querySelector('.input-group[name="profile"]');
 const profileWindow = profileForm.parentElement.parentElement;
 const btnProfileClose = profileForm.previousElementSibling;
-let inputName = profileForm.querySelector('.input-group__text-input[name="name"]');
-let inputActivity = profileForm.querySelector('.input-group__text-input[name="activity"]');
+const inputName = profileForm.querySelector('.input-group__text-input[name="name"]');
+const inputActivity = profileForm.querySelector('.input-group__text-input[name="activity"]');
 
 const articleForm = document.querySelector('.input-group[name="article"]');
 const articleWindow = articleForm.parentElement.parentElement;
 const btnArticleClose = articleForm.previousElementSibling;
-let inputTitle = articleForm.querySelector('.input-group__text-input[name="title"]');
-let inputLink = articleForm.querySelector('.input-group__text-input[name="link"]');
+const inputTitle = articleForm.querySelector('.input-group__text-input[name="title"]');
+const inputLink = articleForm.querySelector('.input-group__text-input[name="link"]');
 
 let elementImage; // Array of cards' images
 const popupImageContainer = document.querySelector('.popup__image-container');
 const imageWindow = popupImageContainer.parentElement.parentElement;
 const btnImageClose = popupImageContainer.previousElementSibling;
-let popupImage = popupImageContainer.querySelector('.popup__image');
-let popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
+const popupImage = popupImageContainer.querySelector('.popup__image');
+const popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
 
 
 
@@ -84,7 +86,7 @@ function fadeIn(windowToOpen) {
 
 // Function definition: Fade out function
 function fadeOut(windowToClose) {
-  window.setTimeout(() => { closePopup(windowToClose); }, 590);
+  window.setTimeout(() => { closePopup(windowToClose); }, popupDelay);
   windowToClose.classList.add('fade-out');
 }
 
@@ -151,11 +153,11 @@ function saveArticle(e) {
     elementImage = document.querySelectorAll('.element__image') // Refresh/update the Array of cards' images
     elementImage.forEach(element => element.addEventListener('click', zoomImage)); // Reattach/refresh click event to cards' images
 
-    btnRemove = document.querySelectorAll('.element__btn-remove'); // Refresh/update the Array of buttons with trash icon
-    btnRemove.forEach(element => element.addEventListener('click', removeElement)); // Reattach/refresh click event to 'Remove' buttons
+    removeButtons = document.querySelectorAll('.element__btn-remove'); // Refresh/update the Array of buttons with trash icon
+    removeButtons.forEach(element => element.addEventListener('click', removeElement)); // Reattach/refresh click event to 'Remove' buttons
 
-    btnLike = document.querySelectorAll('.element__btn-like'); // Refresh/update the Array of buttons with heart icon
-    btnLike.forEach(element => element.addEventListener('click', toggleLike)); // Reattach/refresh click event to 'Add' buttons
+    likeButtons = document.querySelectorAll('.element__btn-like'); // Refresh/update the Array of buttons with heart icon
+    likeButtons.forEach(element => element.addEventListener('click', toggleLike)); // Reattach/refresh click event to 'Add' buttons
   }
 
   toggleArticleForm();
@@ -213,8 +215,8 @@ for (let i = 0; i < elementsArray.length; i++) {
 
 elementImage = document.querySelectorAll('.element__image'); // fill up the Array of cards' images
 
-btnRemove = document.querySelectorAll('.element__btn-remove'); // fill up the Array of buttons with trash icon
-btnLike = document.querySelectorAll('.element__btn-like'); // fill up the Array of buttons with heart icon
+removeButtons = document.querySelectorAll('.element__btn-remove'); // fill up the Array of buttons with trash icon
+likeButtons = document.querySelectorAll('.element__btn-like'); // fill up the Array of buttons with heart icon
 
 
 
@@ -241,6 +243,6 @@ elementImage.forEach(element => element.addEventListener('click', zoomImage)); /
 
 btnImageClose.addEventListener('click', toggleImageWindow); // Click 'Close' button
 
-btnRemove.forEach(element => element.addEventListener('click', removeElement)); // Attach click event to 'Remove' buttons
+removeButtons.forEach(element => element.addEventListener('click', removeElement)); // Attach click event to 'Remove' buttons
 
-btnLike.forEach(element => element.addEventListener('click', toggleLike)); // Attach click event to 'Add' buttons
+likeButtons.forEach(element => element.addEventListener('click', toggleLike)); // Attach click event to 'Add' buttons
