@@ -44,19 +44,36 @@ let filledHeartIcon = './images/icons/icon-heart-filled.svg';
 
 
 const profileForm = document.querySelector('.input-group[name="profile"]');
-let profileWindow = profileForm.parentElement.parentElement;
-let btnProfileClose = profileForm.previousElementSibling;
+const profileWindow = profileForm.parentElement.parentElement;
+const btnProfileClose = profileForm.previousElementSibling;
 let inputName = profileForm.querySelector('.input-group__text-input[name="name"]');
 let inputActivity = profileForm.querySelector('.input-group__text-input[name="activity"]');
 
 const articleForm = document.querySelector('.input-group[name="article"]');
-let articleWindow = articleForm.parentElement.parentElement;
-let btnArticleClose = articleForm.previousElementSibling;
+const articleWindow = articleForm.parentElement.parentElement;
+const btnArticleClose = articleForm.previousElementSibling;
 let inputTitle = articleForm.querySelector('.input-group__text-input[name="title"]');
 let inputLink = articleForm.querySelector('.input-group__text-input[name="link"]');
 
+let elementImage; // Array of cards' images
+const popupImageContainer = document.querySelector('.popup__image-container');
+const imageWindow = popupImageContainer.parentElement.parentElement;
+const btnImageClose = popupImageContainer.previousElementSibling;
+let popupImage = popupImageContainer.querySelector('.popup__image');
+let popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
 
 
+
+
+
+// Function definition: Open/Close popup window with zoomed image
+function toggleImageWindow() {
+  if(imageWindow.classList.contains('popup_opened')) {
+    imageWindow.classList.remove('popup_opened');
+  } else {
+    imageWindow.classList.add('popup_opened');
+  }
+}
 
 
 // Function definition: Open/Close popup window with profile form
@@ -111,14 +128,26 @@ function saveArticle(e) {
 
     elements.prepend(element);
 
-    btnRemove = document.querySelectorAll('.element__btn-remove'); // Refresh/update Array of buttons with trash icon
+    elementImage = document.querySelectorAll('.element__image') // Refresh/update the Array of cards' images
+    elementImage.forEach(element => element.addEventListener('click', zoomImage)); // Reattach/refresh click event to cards' images
+
+    btnRemove = document.querySelectorAll('.element__btn-remove'); // Refresh/update the Array of buttons with trash icon
     btnRemove.forEach(element => element.addEventListener('click', removeElement)); // Reattach/refresh click event to 'Remove' buttons
 
-    btnLike = document.querySelectorAll('.element__btn-like'); // Refresh/update Array of buttons with heart icon
+    btnLike = document.querySelectorAll('.element__btn-like'); // Refresh/update the Array of buttons with heart icon
     btnLike.forEach(element => element.addEventListener('click', toggleLike)); // Reattach/refresh click event to 'Add' buttons
   }
 
   toggleArticleForm();
+}
+
+
+// Function definition: Zoom image
+function zoomImage(e) {
+  popupImage.src = e.target.src;
+  popupImageTitle.textContent = e.target.parentElement.lastElementChild.firstElementChild.textContent;
+
+  toggleImageWindow();
 }
 
 
@@ -150,6 +179,8 @@ for (let i = 0; i < elementsArray.length; i++) {
 
 
 
+elementImage = document.querySelectorAll('.element__image'); // fill up the Array of cards' images
+
 btnRemove = document.querySelectorAll('.element__btn-remove'); // fill up the Array of buttons with trash icon
 btnLike = document.querySelectorAll('.element__btn-like'); // fill up the Array of buttons with heart icon
 
@@ -171,6 +202,10 @@ btnArticleClose.addEventListener('click', toggleArticleForm); // Click 'Close' b
 articleForm.addEventListener('submit', saveArticle); // Click 'Save' button or submit the Article form by pressing Enter
 
 
-btnRemove.forEach(element => element.addEventListener('click', removeElement)); // Attach click event to 'Add' buttons
+elementImage.forEach(element => element.addEventListener('click', zoomImage)); // Attach click event to card's image
+
+btnImageClose.addEventListener('click', toggleImageWindow); // Click 'Close' button
+
+btnRemove.forEach(element => element.addEventListener('click', removeElement)); // Attach click event to 'Remove' buttons
 
 btnLike.forEach(element => element.addEventListener('click', toggleLike)); // Attach click event to 'Add' buttons
