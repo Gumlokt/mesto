@@ -28,17 +28,13 @@
           <div class="profile__info">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
 
-            <button class="profile__btn-edit" type="button">
-              <img src="./images/icons/icon-pencil.svg" alt="Иконка с изображением карандаша" class="profile__icon-pencil">
-            </button>
+            <button class="profile__btn-edit" type="button" aria-label="Открыть окно редактирования профиля"></button>
 
             <p class="profile__activity">Исследователь океана</p>
           </div>
         </div>
 
-        <button class="profile__btn-add" type="button">
-          <img src="./images/icons/icon-plus.svg" alt="Иконка с изображением знака 'плюс'" class="profile__icon-plus">
-        </button>
+        <button class="profile__btn-add" type="button" aria-label="Открыть окно добавления новой карточки"></button>
       </section>
 
 
@@ -56,9 +52,7 @@
 
   <div class="popup">
     <div class="popup__container">
-      <button class="popup__btn-close" type="button">
-        <img src="./images/icons/icon-plus.svg" alt="Иконка для закрытия попапа" class="popup__icon-plus">
-      </button>
+      <button class="popup__btn-close" type="button" aria-label="Закрыть окно"></button>
 
       <form class="input-group" name="profile">
         <h2 class="input-group__title">Редактировать профиль</h2>
@@ -75,9 +69,7 @@
 
   <div class="popup">
     <div class="popup__container">
-      <button class="popup__btn-close" type="button">
-        <img src="./images/icons/icon-plus.svg" alt="Иконка для закрытия попапа" class="popup__icon-plus">
-      </button>
+      <button class="popup__btn-close" type="button" aria-label="Закрыть окно"></button>
 
       <form class="input-group" name="article">
         <h2 class="input-group__title">Новое место</h2>
@@ -94,9 +86,7 @@
 
   <div class="popup">
     <div class="popup__container popup__container_theme_dark">
-      <button class="popup__btn-close" type="button">
-        <img src="./images/icons/icon-plus.svg" alt="Иконка для закрытия попапа" class="popup__icon-plus">
-      </button>
+      <button class="popup__btn-close" type="button" aria-label="Закрыть окно"></button>
 
       <figure class="popup__image-container">
         <img src="https://via.placeholder.com/282" alt="Фото красивого места на весь экран" class="popup__image">
@@ -109,21 +99,21 @@
 
 
   <template id="element">
-    <article class="element">
-      <img src="https://via.placeholder.com/282" alt="Фото красивого места" class="element__image">
+    <ul class="element">
+      <li class="element__item">
+        <img src="https://via.placeholder.com/282" alt="Фото красивого места" class="element__image">
 
-      <button class="element__btn-remove" type="button">
-        <img src="./images/icons/icon-trash.svg" alt="Иконка с изображением мусорной корзины" class="element__icon-trash">
-      </button>
+        <button class="element__btn-remove" type="button" aria-label="Удалить карточку"></button>
+      </li>
 
-      <div class="element__footer">
-        <h2 class="element__title">Эльбрус</h2>
+      <li class="element__item">
+        <div class="element__body">
+          <h2 class="element__title">Эльбрус</h2>
 
-        <button class="element__btn-like" type="button">
-          <img src="./images/icons/icon-heart.svg" alt="Иконка с изображением сердечка" class="element__icon-heart">
-        </button>
-      </div>
-    </article>
+          <button class="element__btn-like" type="button" aria-label="Поставить либо убрать лайк"></button>
+        </div>
+      </li>
+    </ul>
   </template>
 
 

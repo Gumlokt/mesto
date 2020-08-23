@@ -3,6 +3,7 @@
   margin: 0 0 0 10px;
   padding: 0;
   width: 21px;
+  min-width: 21px;
   height: 19px;
   border: 0;
   background-color: transparent;
@@ -10,6 +11,11 @@
   justify-content: center;
   align-items: center;
   transition: opacity .4s linear;
+
+  background-image: url(../../../images/icons/icon-heart.svg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .element__btn-like:hover {

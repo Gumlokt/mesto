@@ -21,21 +21,19 @@
 @import url(../blocks/profile/__info/profile__info.css);
 @import url(../blocks/profile/__name/profile__name.css);
 @import url(../blocks/profile/__btn-edit/profile__btn-edit.css);
-@import url(../blocks/profile/__icon-pencil/profile__icon-pencil.css);
 @import url(../blocks/profile/__activity/profile__activity.css);
 @import url(../blocks/profile/__btn-add/profile__btn-add.css);
-@import url(../blocks/profile/__icon-plus/profile__icon-plus.css);
 
 /* Section: elements */
 @import url(../blocks/elements/elements.css);
 @import url(../blocks/element/element.css);
+@import url(../blocks/element/__item/element__item.css);
 @import url(../blocks/element/__image/element__image.css);
 @import url(../blocks/element/__btn-remove/element__btn-remove.css);
-@import url(../blocks/element/__icon-trash/element__icon-trash.css);
-@import url(../blocks/element/__footer/element__footer.css);
+@import url(../blocks/element/__body/element__body.css);
 @import url(../blocks/element/__title/element__title.css);
 @import url(../blocks/element/__btn-like/element__btn-like.css);
-@import url(../blocks/element/__icon-heart/element__icon-heart.css);
+@import url(../blocks/element/__btn-like/_clicked/element__btn-like_clicked.css);
 
 /* Footer */
 @import url(../blocks/footer/footer.css);
@@ -50,12 +48,7 @@
 @import url(../blocks/popup/__image-container/popup__image-container.css);
 @import url(../blocks/popup/__image/popup__image.css);
 @import url(../blocks/popup/__image-title/popup__image-title.css);
-@import url(../blocks/popup/__icon-plus/popup__icon-plus.css);
 @import url(../blocks/input-group/input-group.css);
 @import url(../blocks/input-group/__title/input-group__title.css);
 @import url(../blocks/input-group/__text-input/input-group__text-input.css);
 @import url(../blocks/input-group/__btn-save/input-group__btn-save.css);
-
-/* Fade effects */
-@import url(../blocks/fade-in/fade-in.css);
-@import url(../blocks/fade-out/fade-out.css);

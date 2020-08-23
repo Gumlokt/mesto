@@ -1,48 +1,41 @@
 // All variables
 const elementsArray = [
   {
-    name: 'Эльбрус',
+    title: 'Эльбрус',
     link: 'https://images.unsplash.com/photo-1587825159281-7d731eaebbc4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60'
   },
   {
-    name: 'Домбай',
+    title: 'Домбай',
     link: 'https://images.unsplash.com/photo-1587825159836-58aa005add47?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60'
   },
   {
-    name: 'Архыз',
+    title: 'Архыз',
     link: 'https://images.unsplash.com/photo-1579721591734-5d961ca6c9f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2467&q=80'
   },
   {
-    name: 'Плато Бермамыт',
+    title: 'Плато Бермамыт',
     link: 'https://images.unsplash.com/photo-1582228538505-2b28df127681?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3289&q=80'
   },
   {
-    name: 'Сентинский храм',
+    title: 'Сентинский храм',
     link: 'https://images.unsplash.com/photo-1538819285938-6a9b4eda500b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1601&q=80'
   },
   {
-    name: 'Бадукские озера',
+    title: 'Бадукские озера',
     link: 'https://images.unsplash.com/photo-1582650517303-b42616d56fba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2698&q=80'
   }
 ];
 
-const popupDelay = 590;
 
-let elements = document.querySelector('.elements');
+const elements = document.querySelector('.elements');
 const elementTemplate = document.querySelector('#element').content;
 
 
-let profileName = document.querySelector('.profile__name');
-let profileActivity = document.querySelector('.profile__activity');
+const profileName = document.querySelector('.profile__name');
+const profileActivity = document.querySelector('.profile__activity');
 
 const btnEdit = document.querySelector('.profile__btn-edit');
 const btnAdd = document.querySelector('.profile__btn-add');
-
-let removeButtons; // Array of buttons with trash icon
-
-let likeButtons; // Array of buttons with heart icon
-const emptyHeartIcon  = './images/icons/icon-heart.svg';
-const filledHeartIcon = './images/icons/icon-heart-filled.svg';
 
 
 const profileForm = document.querySelector('.input-group[name="profile"]');
@@ -57,10 +50,10 @@ const btnArticleClose = articleForm.previousElementSibling;
 const inputTitle = articleForm.querySelector('.input-group__text-input[name="title"]');
 const inputLink = articleForm.querySelector('.input-group__text-input[name="link"]');
 
-let elementImage; // Array of cards' images
 const popupImageContainer = document.querySelector('.popup__image-container');
 const imageWindow = popupImageContainer.parentElement.parentElement;
 const btnImageClose = popupImageContainer.previousElementSibling;
+
 const popupImage = popupImageContainer.querySelector('.popup__image');
 const popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
 
@@ -68,118 +61,35 @@ const popupImageTitle = popupImageContainer.querySelector('.popup__image-title')
 
 
 
-// Function definition: Helper function to check if popup window is opened
-function isOpened(popupWindow) {
+// Function definition: Open/close popup window
+function togglePopupWindow(popupWindow) {
   if(popupWindow.classList.contains('popup_opened')) {
-    return true;
-  }
-
-  return false;
-}
-
-
-// Function definition: Function to add 'popup_opened' and 'fade-in' classes
-function fadeIn(windowToOpen) {
-  windowToOpen.classList.add('popup_opened', 'fade-in');
-}
-
-
-// Function definition: Fade out function
-function fadeOut(windowToClose) {
-  window.setTimeout(() => { closePopup(windowToClose); }, popupDelay);
-  windowToClose.classList.add('fade-out');
-}
-
-
-// Function definition: Function to remove 'popup_opened', 'fade-in' and 'fade-out' classes
-function closePopup(windowToClose) {
-  windowToClose.classList.remove('popup_opened', 'fade-in', 'fade-out');
-}
-
-
-// Function definition: Open/Close popup window with profile form
-function toggleProfileForm() {
-  // if(profileWindow.classList.contains('popup_opened')) {
-  if(isOpened(profileWindow)) {
-    fadeOut(profileWindow);
-
-    inputName.value = '';
-    inputActivity.value = '';
+    popupWindow.classList.remove('popup_opened');
   } else {
-    inputName.value = profileName.textContent;
-    inputActivity.value = profileActivity.textContent;
-
-    fadeIn(profileWindow);
+    popupWindow.classList.add('popup_opened');
   }
 }
 
 
-// Function definition: Save Profile and close popup
+// Function definition: Save Profile and close popup window
 function saveProfile(e) {
   e.preventDefault();
 
   profileName.textContent = inputName.value;
   profileActivity.textContent = inputActivity.value;
 
-  toggleProfileForm();
-}
-
-
-// Function definition: Open/Close popup window with article form
-function toggleArticleForm() {
-  if(isOpened(articleWindow)) {
-    fadeOut(articleWindow);
-
-    inputTitle.value = '';
-    inputLink.value = '';
-  } else {
-    fadeIn(articleWindow);
-  }
-}
-
-
-// Function definition: Save Article and close popup
-function saveArticle(e) {
-  e.preventDefault();
-
-  if ('' != inputTitle.value && '' != inputLink.value) {
-    const element = elementTemplate.cloneNode(true);
-
-    element.querySelector('.element__title').textContent = inputTitle.value;
-    element.querySelector('.element__image').src = inputLink.value;
-
-    elements.prepend(element);
-
-    elementImage = document.querySelectorAll('.element__image') // Refresh/update the Array of cards' images
-    elementImage.forEach(element => element.addEventListener('click', zoomImage)); // Reattach/refresh click event to cards' images
-
-    removeButtons = document.querySelectorAll('.element__btn-remove'); // Refresh/update the Array of buttons with trash icon
-    removeButtons.forEach(element => element.addEventListener('click', removeElement)); // Reattach/refresh click event to 'Remove' buttons
-
-    likeButtons = document.querySelectorAll('.element__btn-like'); // Refresh/update the Array of buttons with heart icon
-    likeButtons.forEach(element => element.addEventListener('click', toggleLike)); // Reattach/refresh click event to 'Add' buttons
-  }
-
-  toggleArticleForm();
-}
-
-
-// Function definition: Open/Close popup window with full sized image
-function toggleImageWindow() {
-  if(isOpened(imageWindow)) {
-    fadeOut(imageWindow);
-  } else {
-    fadeIn(imageWindow);
-  }
+  togglePopupWindow(profileWindow);
 }
 
 
 // Function definition: Set image source and image-title to popup window with full sized image
 function zoomImage(e) {
-  popupImage.src = e.target.src;
-  popupImageTitle.textContent = e.target.parentElement.lastElementChild.firstElementChild.textContent;
+  console.log(e.target.src);
 
-  toggleImageWindow();
+  popupImage.src = e.target.src;
+  popupImageTitle.textContent = e.target.parentElement.parentElement.lastElementChild.firstElementChild.textContent;
+
+  togglePopupWindow(imageWindow);
 }
 
 
@@ -191,58 +101,82 @@ function removeElement(e) {
 
 // Function definition: Set/unset 'like' to the card
 function toggleLike(e) {
-  if(e.target.getAttribute('src') === emptyHeartIcon) {
-    e.target.setAttribute('src', filledHeartIcon);
+  if(e.target.classList.contains('element__btn-like_clicked')) {
+    e.target.classList.remove('element__btn-like_clicked');
   } else {
-    e.target.setAttribute('src', emptyHeartIcon);
+    e.target.classList.add('element__btn-like_clicked');
   }
 }
 
 
+// Function definition: Create new card (or new element in BEM notation)
+function createCard(title, link) {
+  const newCard = elementTemplate.cloneNode(true);
 
+  const cardImage = newCard.querySelector('.element__image');
+  const cardTitle = newCard.querySelector('.element__title');
+  const removeButton = newCard.querySelector('.element__btn-remove');
+  const likeButton = newCard.querySelector('.element__btn-like');
 
+  cardImage.src = link;
+  cardTitle.textContent = title;
 
+  cardImage.addEventListener('click', zoomImage);
+  removeButton.addEventListener('click', removeElement);
+  likeButton.addEventListener('click', toggleLike);
 
-// Fill up articles/cards (or elements in BEM notation)
-for (let i = 0; i < elementsArray.length; i++) {
-  const element = elementTemplate.cloneNode(true);
-
-  element.querySelector('.element__image').src = elementsArray[i].link;
-  element.querySelector('.element__title').textContent = elementsArray[i].name;
-
-  elements.append(element);
+  return newCard;
 }
 
-elementImage = document.querySelectorAll('.element__image'); // fill up the Array of cards' images
 
-removeButtons = document.querySelectorAll('.element__btn-remove'); // fill up the Array of buttons with trash icon
-likeButtons = document.querySelectorAll('.element__btn-like'); // fill up the Array of buttons with heart icon
+// Function definition: Save Article and close popup
+function saveArticle(e) {
+  e.preventDefault();
+
+  if (inputTitle.value && inputLink.value) {
+    elements.prepend(createCard(inputTitle.value, inputLink.value));
+  }
+
+  togglePopupWindow(articleWindow);
+  articleForm.reset();
+}
 
 
+
+
+
+
+// Fill up page with predefined cards (or with predefined elements in BEM notation)
+elementsArray.forEach((item) => { elements.append(createCard(item.title, item.link)); });
 
 
 
 // Catch events:
-btnEdit.addEventListener('click', toggleProfileForm); // Click 'Edit' button
+btnEdit.addEventListener('click', () => { // Click 'Edit' button
+  inputName.value = profileName.textContent;
+  inputActivity.value = profileActivity.textContent;
 
-btnProfileClose.addEventListener('click', toggleProfileForm); // Click 'Close' button
+  togglePopupWindow(profileWindow);
+});
+
+btnProfileClose.addEventListener('click', () => { // Click 'Close' button
+  togglePopupWindow(profileWindow);
+  profileForm.reset();
+});
 
 profileForm.addEventListener('submit', saveProfile); // Click 'Save' button or submit the Profile form by pressing Enter
 
 
 
-btnAdd.addEventListener('click', toggleArticleForm); // Click 'Add' button
+btnAdd.addEventListener('click', () => { togglePopupWindow(articleWindow); }); // Click 'Add' button
 
-btnArticleClose.addEventListener('click', toggleArticleForm); // Click 'Close' button
+btnArticleClose.addEventListener('click', () => { // Click 'Close' button
+  togglePopupWindow(articleWindow);
+  articleForm.reset();
+});
 
 articleForm.addEventListener('submit', saveArticle); // Click 'Save' button or submit the Article form by pressing Enter
 
 
 
-elementImage.forEach(element => element.addEventListener('click', zoomImage)); // Attach click event to card's image
-
-btnImageClose.addEventListener('click', toggleImageWindow); // Click 'Close' button
-
-removeButtons.forEach(element => element.addEventListener('click', removeElement)); // Attach click event to 'Remove' buttons
-
-likeButtons.forEach(element => element.addEventListener('click', toggleLike)); // Attach click event to 'Add' buttons
+btnImageClose.addEventListener('click', () => { togglePopupWindow(imageWindow); }); // Click 'Close' button
