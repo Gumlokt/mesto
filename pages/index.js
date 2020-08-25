@@ -1,4 +1,4 @@
-// All variables
+/** All variables */
 const elementsArray = [
   {
     title: 'Эльбрус',
@@ -44,11 +44,11 @@ const btnProfileClose = profileForm.previousElementSibling;
 const inputName = profileForm.querySelector('.input-group__text-input[name="name"]');
 const inputActivity = profileForm.querySelector('.input-group__text-input[name="activity"]');
 
-const articleForm = document.querySelector('.input-group[name="article"]');
-const articleWindow = articleForm.parentElement.parentElement;
-const btnArticleClose = articleForm.previousElementSibling;
-const inputTitle = articleForm.querySelector('.input-group__text-input[name="title"]');
-const inputLink = articleForm.querySelector('.input-group__text-input[name="link"]');
+const cardForm = document.querySelector('.input-group[name="card"]');
+const cardWindow = cardForm.parentElement.parentElement;
+const btnCardClose = cardForm.previousElementSibling;
+const inputTitle = cardForm.querySelector('.input-group__text-input[name="title"]');
+const inputLink = cardForm.querySelector('.input-group__text-input[name="link"]');
 
 const popupImageContainer = document.querySelector('.popup__image-container');
 const imageWindow = popupImageContainer.parentElement.parentElement;
@@ -61,7 +61,11 @@ const popupImageTitle = popupImageContainer.querySelector('.popup__image-title')
 
 
 
-// Function definition: Open/close popup window
+/**
+ * Open/close popup window.
+ * @function
+ * @param {object} popupWindow - The popup window.
+ */
 function togglePopupWindow(popupWindow) {
   if(popupWindow.classList.contains('popup_opened')) {
     popupWindow.classList.remove('popup_opened');
@@ -71,7 +75,11 @@ function togglePopupWindow(popupWindow) {
 }
 
 
-// Function definition: Save Profile and close popup window
+/**
+ * Save Profile and close popup window.
+ * @function
+ * @param {object} e - The submitted form.
+ */
 function saveProfile(e) {
   e.preventDefault();
 
@@ -82,24 +90,37 @@ function saveProfile(e) {
 }
 
 
-// Function definition: Set image source and image-title to popup window with full sized image
+/**
+ * Sets image source, image-title and image alt to display full sized image in popup window.
+ * @function
+ * @param {object} e - The image that was clicked on.
+ */
 function zoomImage(e) {
-  console.log(e.target.src);
+  const element = e.target.closest('.element');
 
   popupImage.src = e.target.src;
-  popupImageTitle.textContent = e.target.parentElement.parentElement.lastElementChild.firstElementChild.textContent;
+  popupImage.alt = e.target.alt.replace('Фото', 'Фото на весь экран');
+  popupImageTitle.textContent = element.querySelector('.element__title').textContent;
 
   togglePopupWindow(imageWindow);
 }
 
 
-// Function definition: Remove card element
+/**
+ * Removes card element.
+ * @function
+ * @param {object} e - The button with trash icon.
+ */
 function removeElement(e) {
-  e.target.parentElement.parentElement.remove()
+  e.target.closest('.element').remove();
 }
 
 
-// Function definition: Set/unset 'like' to the card
+/**
+ * Sets/unsets 'like' to the card.
+ * @function
+ * @param {object} e - The button with heart icon.
+ */
 function toggleLike(e) {
   if(e.target.classList.contains('element__btn-like_clicked')) {
     e.target.classList.remove('element__btn-like_clicked');
@@ -109,7 +130,12 @@ function toggleLike(e) {
 }
 
 
-// Function definition: Create new card (or new element in BEM notation)
+/**
+ * Creates new card (or new element in BEM notation).
+ * @function
+ * @param {string} title - The title of the card.
+ * @param {string} link - The URL of the image.
+ */
 function createCard(title, link) {
   const newCard = elementTemplate.cloneNode(true);
 
@@ -119,6 +145,7 @@ function createCard(title, link) {
   const likeButton = newCard.querySelector('.element__btn-like');
 
   cardImage.src = link;
+  cardImage.alt = 'Фото. ' + title;
   cardTitle.textContent = title;
 
   cardImage.addEventListener('click', zoomImage);
@@ -129,16 +156,18 @@ function createCard(title, link) {
 }
 
 
-// Function definition: Save Article and close popup
-function saveArticle(e) {
+/**
+ * Saves card and closes popup window.
+ * @function
+ * @param {object} e - The submitted form.
+ */
+function saveCard(e) {
   e.preventDefault();
 
-  if (inputTitle.value && inputLink.value) {
-    elements.prepend(createCard(inputTitle.value, inputLink.value));
-  }
+  elements.prepend(createCard(inputTitle.value, inputLink.value));
 
-  togglePopupWindow(articleWindow);
-  articleForm.reset();
+  togglePopupWindow(cardWindow);
+  cardForm.reset();
 }
 
 
@@ -146,37 +175,43 @@ function saveArticle(e) {
 
 
 
-// Fill up page with predefined cards (or with predefined elements in BEM notation)
+/** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
 elementsArray.forEach((item) => { elements.append(createCard(item.title, item.link)); });
 
 
 
-// Catch events:
-btnEdit.addEventListener('click', () => { // Click 'Edit' button
+/** Attaches 'click' event on the 'Edit' button. */
+btnEdit.addEventListener('click', () => {
   inputName.value = profileName.textContent;
   inputActivity.value = profileActivity.textContent;
 
   togglePopupWindow(profileWindow);
 });
 
-btnProfileClose.addEventListener('click', () => { // Click 'Close' button
+/** Attaches 'click' event on the 'Close' button of popup window with user profile. */
+btnProfileClose.addEventListener('click', () => {
   togglePopupWindow(profileWindow);
   profileForm.reset();
 });
 
-profileForm.addEventListener('submit', saveProfile); // Click 'Save' button or submit the Profile form by pressing Enter
+/** Attaches 'submit' event on the form to save user's profile. */
+profileForm.addEventListener('submit', saveProfile);
 
 
 
-btnAdd.addEventListener('click', () => { togglePopupWindow(articleWindow); }); // Click 'Add' button
+/** Attaches 'click' event on the 'Add' button to popup window with creating card form. */
+btnAdd.addEventListener('click', () => { togglePopupWindow(cardWindow); });
 
-btnArticleClose.addEventListener('click', () => { // Click 'Close' button
-  togglePopupWindow(articleWindow);
-  articleForm.reset();
+/** Attaches 'click' event on the 'Close' button of popup window with creating card form. */
+btnCardClose.addEventListener('click', () => {
+  togglePopupWindow(cardWindow);
+  cardForm.reset();
 });
 
-articleForm.addEventListener('submit', saveArticle); // Click 'Save' button or submit the Article form by pressing Enter
+/** Attaches 'submit' event on the form to save new card. */
+cardForm.addEventListener('submit', saveCard);
 
 
 
-btnImageClose.addEventListener('click', () => { togglePopupWindow(imageWindow); }); // Click 'Close' button
+/** Attaches 'click' event on the 'Close' button of popup window full sized image. */
+btnImageClose.addEventListener('click', () => { togglePopupWindow(imageWindow); });
