@@ -62,7 +62,7 @@ const popupImageTitle = popupImageContainer.querySelector('.popup__image-title')
 
 
 /**
- * Open/close popup window.
+ * Opens/closes popup window.
  * @function
  * @param {object} popupWindow - The popup window.
  */
@@ -76,7 +76,7 @@ function togglePopupWindow(popupWindow) {
 
 
 /**
- * Save Profile and close popup window.
+ * Saves Profile and close popup window.
  * @function
  * @param {object} e - The submitted form.
  */

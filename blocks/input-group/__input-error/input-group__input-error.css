@@ -1,0 +1,10 @@
+.input-group__input-error {
+  box-sizing: border-box;
+  margin: 0 0 13px;
+  padding: 0;
+  max-width: 358px;
+  font-size: 12px;
+  line-height: 15px;
+  color: #F00;
+  display: none;
+}
