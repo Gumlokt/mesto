@@ -1,4 +1,4 @@
-.input-group__input-error {
+.form__input-error {
   box-sizing: border-box;
   margin: 0 0 13px;
   padding: 0;
@@ -7,4 +7,8 @@
   line-height: 15px;
   color: #F00;
   display: none;
+}
+
+.form__input-error:last-of-type {
+  margin: 0 0 31px;
 }

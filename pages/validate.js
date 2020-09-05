@@ -1,3 +1,14 @@
+/** The set of CSS selectors and classes. */
+const cssClasses = {
+  formSelector: '.form',
+  inputSelector: '.form__text-input',
+  submitButtonSelector: '.form__btn-save',
+  inactiveButtonClass: 'form__btn-save_disabled',
+  inputErrorClass: 'form__text-input_type_error',
+  errorClass: 'form__input-error_active'
+};
+
+
 /**
  * Displays error message for editing input.
  * @function
@@ -88,6 +99,24 @@ const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
 
 
 /**
+ * Resets form to default values.
+ * @function
+ * @param {object} formElement - The form of popup window.
+ */
+function resetForm(formElement) {
+  formElement.reset();
+
+  const inputList = Array.from(formElement.querySelectorAll(cssClasses.inputSelector));
+
+  inputList.forEach((inputElement) => {
+    hideInputError(formElement, inputElement, cssClasses);
+  });
+
+  toggleButtonState(inputList, formElement.elements.saveButton, cssClasses.inactiveButtonClass);
+}
+
+
+/**
  * Sets event listeners to all inputs of the passed form.
  * @function
  * @param {object} formElement - The form.
@@ -134,11 +163,4 @@ const enableValidation = (cssClasses) => {
 
 
 /** Starts the validation process. */
-enableValidation({
-  formSelector: '.input-group',
-  inputSelector: '.input-group__text-input',
-  submitButtonSelector: '.input-group__btn-save',
-  inactiveButtonClass: 'input-group__btn-save_disabled',
-  inputErrorClass: 'input-group__text-input_type_error',
-  errorClass: 'input-group__input-error_active'
-});
+enableValidation(cssClasses);

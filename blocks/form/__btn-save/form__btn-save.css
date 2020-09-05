@@ -1,4 +1,4 @@
-.input-group__btn-save {
+.form__btn-save {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -13,12 +13,12 @@
   transition: background-color .4s linear;
 }
 
-.input-group__btn-save:hover {
+.form__btn-save:hover {
   background-color: rgba(0, 0, 0, .8);
 }
 
 @media screen and (max-width: 620px) {
-  .input-group__btn-save {
+  .form__btn-save {
     height: 40px;
     font-size: 14px;
     line-height: 17px;

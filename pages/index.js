@@ -1,32 +1,4 @@
 /** All variables */
-const elementsArray = [
-  {
-    title: 'Эльбрус',
-    link: 'https://images.unsplash.com/photo-1587825159281-7d731eaebbc4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60'
-  },
-  {
-    title: 'Домбай',
-    link: 'https://images.unsplash.com/photo-1587825159836-58aa005add47?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60'
-  },
-  {
-    title: 'Архыз',
-    link: 'https://images.unsplash.com/photo-1579721591734-5d961ca6c9f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2467&q=80'
-  },
-  {
-    title: 'Плато Бермамыт',
-    link: 'https://images.unsplash.com/photo-1582228538505-2b28df127681?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3289&q=80'
-  },
-  {
-    title: 'Сентинский храм',
-    link: 'https://images.unsplash.com/photo-1538819285938-6a9b4eda500b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1601&q=80'
-  },
-  {
-    title: 'Бадукские озера',
-    link: 'https://images.unsplash.com/photo-1582650517303-b42616d56fba?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2698&q=80'
-  }
-];
-
-
 const elements = document.querySelector('.elements');
 const elementTemplate = document.querySelector('#element').content;
 
@@ -38,17 +10,17 @@ const btnEdit = document.querySelector('.profile__btn-edit');
 const btnAdd = document.querySelector('.profile__btn-add');
 
 
-const profileForm = document.querySelector('.input-group[name="profile"]');
-const profileWindow = profileForm.parentElement.parentElement;
-const btnProfileClose = profileForm.previousElementSibling;
+const profileForm = document.querySelector('.form[name="profile"]');
+const profileWindow = profileForm.closest('.popup');
+const btnProfileClose = profileWindow.querySelector('.popup__btn-close');
 
-const cardForm = document.querySelector('.input-group[name="card"]');
-const cardWindow = cardForm.parentElement.parentElement;
-const btnCardClose = cardForm.previousElementSibling;
+const cardForm = document.querySelector('.form[name="card"]');
+const cardWindow = cardForm.closest('.popup');
+const btnCardClose = cardWindow.querySelector('.popup__btn-close');
 
 const popupImageContainer = document.querySelector('.popup__image-container');
-const imageWindow = popupImageContainer.parentElement.parentElement;
-const btnImageClose = popupImageContainer.previousElementSibling;
+const imageWindow = popupImageContainer.closest('.popup');
+const btnImageClose = imageWindow.querySelector('.popup__btn-close');
 
 const popupImage = popupImageContainer.querySelector('.popup__image');
 const popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
@@ -70,36 +42,6 @@ function catchPressingEscape(e) {
 
 
 /**
- * Resets form to default values.
- * @function
- * @param {object} popupWindow - The popup window.
- */
-function resetForm(popupWindow) {
-  const popupForm = popupWindow.querySelector('form');
-
-  if (popupForm) {
-    popupForm.reset();
-
-    const inputList = Array.from(popupWindow.querySelectorAll('.input-group__text-input'));
-    const errorsList = popupWindow.querySelectorAll('.input-group__input-error_active');
-    const submitButton = popupWindow.querySelector('.input-group__btn-save');
-
-    inputList.forEach((item) => {
-      item.classList.remove('input-group__text-input_type_error');
-      item.textContent = '';
-    });
-
-    errorsList.forEach((item) => {
-      item.classList.remove('input-group__input-error_active');
-      item.textContent = '';
-    });
-
-    toggleButtonState(inputList, submitButton, 'input-group__btn-save_disabled');
-  }
-}
-
-
-/**
  * Opens/closes popup window.
  * @function
  * @param {object} popupWindow - The popup window.
@@ -108,8 +50,6 @@ function togglePopupWindow(popupWindow) {
   if(popupWindow.classList.contains('popup_opened')) {
     popupWindow.classList.remove('popup_opened');
     document.removeEventListener('keydown', catchPressingEscape);
-
-    resetForm(popupWindow);
   } else {
     popupWindow.classList.add('popup_opened');
     document.addEventListener('keydown', catchPressingEscape);
@@ -223,11 +163,13 @@ elementsArray.forEach((item) => { elements.append(createCard(item.title, item.li
 
 /** Attaches 'click' event on the 'Edit' button. */
 btnEdit.addEventListener('click', () => {
+  resetForm(profileForm);
+
   profileForm.elements.name.value = profileName.textContent;
   profileForm.elements.activity.value = profileActivity.textContent;
 
   const inputList = Array.from(profileForm.elements);
-  toggleButtonState(inputList, profileForm.elements.saveButton, 'input-group__btn-save_disabled');
+  toggleButtonState(inputList, profileForm.elements.saveButton, cssClasses.inactiveButtonClass);
 
   togglePopupWindow(profileWindow);
 });
@@ -241,7 +183,10 @@ profileForm.addEventListener('submit', saveProfile);
 
 
 /** Attaches 'click' event on the 'Add' button to popup window with creating card form. */
-btnAdd.addEventListener('click', () => { togglePopupWindow(cardWindow); });
+btnAdd.addEventListener('click', () => {
+  resetForm(cardForm);
+  togglePopupWindow(cardWindow);
+});
 
 /** Attaches 'click' event on the 'Close' button of popup window with creating card form. */
 btnCardClose.addEventListener('click', () => { togglePopupWindow(cardWindow); });
