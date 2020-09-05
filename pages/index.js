@@ -41,14 +41,10 @@ const btnAdd = document.querySelector('.profile__btn-add');
 const profileForm = document.querySelector('.input-group[name="profile"]');
 const profileWindow = profileForm.parentElement.parentElement;
 const btnProfileClose = profileForm.previousElementSibling;
-const inputName = profileForm.querySelector('.input-group__text-input[name="name"]');
-const inputActivity = profileForm.querySelector('.input-group__text-input[name="activity"]');
 
 const cardForm = document.querySelector('.input-group[name="card"]');
 const cardWindow = cardForm.parentElement.parentElement;
 const btnCardClose = cardForm.previousElementSibling;
-const inputTitle = cardForm.querySelector('.input-group__text-input[name="title"]');
-const inputLink = cardForm.querySelector('.input-group__text-input[name="link"]');
 
 const popupImageContainer = document.querySelector('.popup__image-container');
 const imageWindow = popupImageContainer.parentElement.parentElement;
@@ -57,8 +53,50 @@ const btnImageClose = popupImageContainer.previousElementSibling;
 const popupImage = popupImageContainer.querySelector('.popup__image');
 const popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
 
+const popupWindowsList = Array.from(document.querySelectorAll('.popup'));
 
 
+
+/**
+ * Catches pressing 'Escape' key on the keyboard to close any opened popup window.
+ * @function
+ * @param {object} e - Pressed key on the keyboard.
+ */
+function catchPressingEscape(e) {
+  if (e.key === 'Escape') {
+    togglePopupWindow(document.querySelector('.popup_opened'));
+  }
+}
+
+
+/**
+ * Resets form to default values.
+ * @function
+ * @param {object} popupWindow - The popup window.
+ */
+function resetForm(popupWindow) {
+  const popupForm = popupWindow.querySelector('form');
+
+  if (popupForm) {
+    popupForm.reset();
+
+    const inputList = Array.from(popupWindow.querySelectorAll('.input-group__text-input'));
+    const errorsList = popupWindow.querySelectorAll('.input-group__input-error_active');
+    const submitButton = popupWindow.querySelector('.input-group__btn-save');
+
+    inputList.forEach((item) => {
+      item.classList.remove('input-group__text-input_type_error');
+      item.textContent = '';
+    });
+
+    errorsList.forEach((item) => {
+      item.classList.remove('input-group__input-error_active');
+      item.textContent = '';
+    });
+
+    toggleButtonState(inputList, submitButton, 'input-group__btn-save_disabled');
+  }
+}
 
 
 /**
@@ -69,8 +107,12 @@ const popupImageTitle = popupImageContainer.querySelector('.popup__image-title')
 function togglePopupWindow(popupWindow) {
   if(popupWindow.classList.contains('popup_opened')) {
     popupWindow.classList.remove('popup_opened');
+    document.removeEventListener('keydown', catchPressingEscape);
+
+    resetForm(popupWindow);
   } else {
     popupWindow.classList.add('popup_opened');
+    document.addEventListener('keydown', catchPressingEscape);
   }
 }
 
@@ -83,8 +125,8 @@ function togglePopupWindow(popupWindow) {
 function saveProfile(e) {
   e.preventDefault();
 
-  profileName.textContent = inputName.value;
-  profileActivity.textContent = inputActivity.value;
+  profileName.textContent = profileForm.elements.name.value;
+  profileActivity.textContent = profileForm.elements.activity.value;
 
   togglePopupWindow(profileWindow);
 }
@@ -164,10 +206,9 @@ function createCard(title, link) {
 function saveCard(e) {
   e.preventDefault();
 
-  elements.prepend(createCard(inputTitle.value, inputLink.value));
+  elements.prepend(createCard(cardForm.elements.title.value, cardForm.elements.link.value));
 
   togglePopupWindow(cardWindow);
-  cardForm.reset();
 }
 
 
@@ -182,17 +223,17 @@ elementsArray.forEach((item) => { elements.append(createCard(item.title, item.li
 
 /** Attaches 'click' event on the 'Edit' button. */
 btnEdit.addEventListener('click', () => {
-  inputName.value = profileName.textContent;
-  inputActivity.value = profileActivity.textContent;
+  profileForm.elements.name.value = profileName.textContent;
+  profileForm.elements.activity.value = profileActivity.textContent;
+
+  const inputList = Array.from(profileForm.elements);
+  toggleButtonState(inputList, profileForm.elements.saveButton, 'input-group__btn-save_disabled');
 
   togglePopupWindow(profileWindow);
 });
 
 /** Attaches 'click' event on the 'Close' button of popup window with user profile. */
-btnProfileClose.addEventListener('click', () => {
-  togglePopupWindow(profileWindow);
-  profileForm.reset();
-});
+btnProfileClose.addEventListener('click', () => { togglePopupWindow(profileWindow); });
 
 /** Attaches 'submit' event on the form to save user's profile. */
 profileForm.addEventListener('submit', saveProfile);
@@ -203,10 +244,7 @@ profileForm.addEventListener('submit', saveProfile);
 btnAdd.addEventListener('click', () => { togglePopupWindow(cardWindow); });
 
 /** Attaches 'click' event on the 'Close' button of popup window with creating card form. */
-btnCardClose.addEventListener('click', () => {
-  togglePopupWindow(cardWindow);
-  cardForm.reset();
-});
+btnCardClose.addEventListener('click', () => { togglePopupWindow(cardWindow); });
 
 /** Attaches 'submit' event on the form to save new card. */
 cardForm.addEventListener('submit', saveCard);
@@ -215,3 +253,14 @@ cardForm.addEventListener('submit', saveCard);
 
 /** Attaches 'click' event on the 'Close' button of popup window full sized image. */
 btnImageClose.addEventListener('click', () => { togglePopupWindow(imageWindow); });
+
+
+
+/** Catches 'Click' event on overlay to close any opened popup window. */
+popupWindowsList.forEach((popupWindow) => {
+  popupWindow.addEventListener('click', (e) => {
+    if (popupWindow.classList.contains('popup_opened') && e.target.classList.contains('popup')) {
+      togglePopupWindow(popupWindow);
+    }
+  });
+});

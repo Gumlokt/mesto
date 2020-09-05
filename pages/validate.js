@@ -71,18 +71,18 @@ const isValid = (formElement, inputElement, cssClasses) => {
  * @function
  * @param {object} inputList - All inputs of the editing form.
  * @param {object} buttonElement - The submit button.
- * @param {object} cssClasses - The set of CSS selectors and classes.
+ * @param {string} inactiveButtonClass - The CSS class for disabled button.
  */
-const toggleButtonState = (inputList, buttonElement, cssClasses) => {
+const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
   // Если есть хотя бы один невалидный инпут
   if (hasInvalidInput(inputList)) {
     // сделай кнопку неактивной
     buttonElement.setAttribute('disabled', 'disabled');
-    buttonElement.classList.add(cssClasses.inactiveButtonClass);
+    buttonElement.classList.add(inactiveButtonClass);
   } else {
     // иначе сделай кнопку активной
     buttonElement.removeAttribute('disabled');
-    buttonElement.classList.remove(cssClasses.inactiveButtonClass);
+    buttonElement.classList.remove(inactiveButtonClass);
   }
 };
 
@@ -98,8 +98,6 @@ const setEventListeners = (formElement, cssClasses) => {
   const inputList = Array.from(formElement.querySelectorAll(cssClasses.inputSelector));
   const buttonElement = formElement.querySelector(cssClasses.submitButtonSelector);
 
-  toggleButtonState(inputList, buttonElement, cssClasses);
-
   // Обойдём все элементы полученной коллекции
   inputList.forEach((inputElement) => {
     // каждому полю добавим обработчик события input
@@ -107,7 +105,7 @@ const setEventListeners = (formElement, cssClasses) => {
       // Внутри колбэка вызовем isValid, передав ей форму и проверяемый элемент
       isValid(formElement, inputElement, cssClasses);
 
-      toggleButtonState(inputList, buttonElement, cssClasses);
+      toggleButtonState(inputList, buttonElement, cssClasses.inactiveButtonClass);
     });
   });
 };
@@ -116,7 +114,6 @@ const setEventListeners = (formElement, cssClasses) => {
 /**
  * Sets event listeners for all forms of the page to validate all its inputs.
  * @function
- * @param {object} formElement - The form.
  * @param {object} cssClasses - The set of CSS selectors and classes.
  */
 const enableValidation = (cssClasses) => {
@@ -125,9 +122,9 @@ const enableValidation = (cssClasses) => {
 
   // Переберём полученную коллекцию
   formList.forEach((formElement) => {
-    formElement.addEventListener('submit', (evt) => {
+    formElement.addEventListener('submit', (e) => {
       // У каждой формы отменим стандартное поведение
-      evt.preventDefault();
+      e.preventDefault();
     });
 
     // Для каждой формы вызовем функцию setEventListeners, передав ей элемент формы

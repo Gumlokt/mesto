@@ -28,7 +28,7 @@
 }
 
 @media screen and (max-width: 620px) {
-  .popup__icon-times {
+  .popup__btn-close {
     width: 42px;
     height: 42px;
     top: -33px;
