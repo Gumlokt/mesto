@@ -1,4 +1,4 @@
-const elementsArray = [
+export const elementsArray = [
   {
     title: 'Эльбрус',
     link: 'https://images.unsplash.com/photo-1587825159281-7d731eaebbc4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=60'

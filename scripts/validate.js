@@ -1,5 +1,5 @@
 /** The set of CSS selectors and classes. */
-const cssClasses = {
+export const cssClasses = {
   formSelector: '.form',
   inputSelector: '.form__text-input',
   submitButtonSelector: '.form__btn-save',
@@ -84,7 +84,7 @@ const isValid = (formElement, inputElement, cssClasses) => {
  * @param {object} buttonElement - The submit button.
  * @param {string} inactiveButtonClass - The CSS class for disabled button.
  */
-const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
+export const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
   // Если есть хотя бы один невалидный инпут
   if (hasInvalidInput(inputList)) {
     // сделай кнопку неактивной
@@ -103,7 +103,7 @@ const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
  * @function
  * @param {object} formElement - The form of popup window.
  */
-function resetForm(formElement) {
+export function resetForm(formElement) {
   formElement.reset();
 
   const inputList = Array.from(formElement.querySelectorAll(cssClasses.inputSelector));

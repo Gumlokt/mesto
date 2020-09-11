@@ -1,3 +1,12 @@
+import { cssClasses, toggleButtonState, resetForm } from './validate.js';
+
+import { elementsArray } from './places.js';
+
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
+
+let card = new Card;
+
 /** All variables */
 const elements = document.querySelector('.elements');
 const elementTemplate = document.querySelector('#element').content;
