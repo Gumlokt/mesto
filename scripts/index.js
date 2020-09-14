@@ -5,7 +5,7 @@ import { elementsArray } from './places.js';
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
 
-let card = new Card;
+
 
 /** All variables */
 const elements = document.querySelector('.elements');
@@ -155,7 +155,10 @@ function createCard(title, link) {
 function saveCard(e) {
   e.preventDefault();
 
-  elements.prepend(createCard(cardForm.elements.title.value, cardForm.elements.link.value));
+  // elements.prepend(createCard(cardForm.elements.title.value, cardForm.elements.link.value));
+
+  let cardElement = new Card(cardForm, '#element');
+  elements.prepend(cardElement.createCard());
 
   togglePopupWindow(cardWindow);
 }
