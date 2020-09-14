@@ -27,12 +27,9 @@ const cardForm = document.querySelector('.form[name="card"]');
 const cardWindow = cardForm.closest('.popup');
 const btnCardClose = cardWindow.querySelector('.popup__btn-close');
 
-const popupImageContainer = document.querySelector('.popup__image-container');
-const imageWindow = popupImageContainer.closest('.popup');
+export const popupImageContainer = document.querySelector('.popup__image-container');
+export const imageWindow = popupImageContainer.closest('.popup');
 const btnImageClose = imageWindow.querySelector('.popup__btn-close');
-
-const popupImage = popupImageContainer.querySelector('.popup__image');
-const popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
 
 const popupWindowsList = Array.from(document.querySelectorAll('.popup'));
 
@@ -55,7 +52,7 @@ function catchPressingEscape(e) {
  * @function
  * @param {object} popupWindow - The popup window.
  */
-function togglePopupWindow(popupWindow) {
+export function togglePopupWindow(popupWindow) {
   if(popupWindow.classList.contains('popup_opened')) {
     popupWindow.classList.remove('popup_opened');
     document.removeEventListener('keydown', catchPressingEscape);
@@ -82,72 +79,6 @@ function saveProfile(e) {
 
 
 /**
- * Sets image source, image-title and image alt to display full sized image in popup window.
- * @function
- * @param {object} e - The image that was clicked on.
- */
-function zoomImage(e) {
-  const element = e.target.closest('.element');
-
-  popupImage.src = e.target.src;
-  popupImage.alt = e.target.alt.replace('Фото', 'Фото на весь экран');
-  popupImageTitle.textContent = element.querySelector('.element__title').textContent;
-
-  togglePopupWindow(imageWindow);
-}
-
-
-/**
- * Removes card element.
- * @function
- * @param {object} e - The button with trash icon.
- */
-function removeElement(e) {
-  e.target.closest('.element').remove();
-}
-
-
-/**
- * Sets/unsets 'like' to the card.
- * @function
- * @param {object} e - The button with heart icon.
- */
-function toggleLike(e) {
-  if(e.target.classList.contains('element__btn-like_clicked')) {
-    e.target.classList.remove('element__btn-like_clicked');
-  } else {
-    e.target.classList.add('element__btn-like_clicked');
-  }
-}
-
-
-/**
- * Creates new card (or new element in BEM notation).
- * @function
- * @param {string} title - The title of the card.
- * @param {string} link - The URL of the image.
- */
-function createCard(title, link) {
-  const newCard = elementTemplate.cloneNode(true);
-
-  const cardImage = newCard.querySelector('.element__image');
-  const cardTitle = newCard.querySelector('.element__title');
-  const removeButton = newCard.querySelector('.element__btn-remove');
-  const likeButton = newCard.querySelector('.element__btn-like');
-
-  cardImage.src = link;
-  cardImage.alt = 'Фото. ' + title;
-  cardTitle.textContent = title;
-
-  cardImage.addEventListener('click', zoomImage);
-  removeButton.addEventListener('click', removeElement);
-  likeButton.addEventListener('click', toggleLike);
-
-  return newCard;
-}
-
-
-/**
  * Saves card and closes popup window.
  * @function
  * @param {object} e - The submitted form.
@@ -155,9 +86,7 @@ function createCard(title, link) {
 function saveCard(e) {
   e.preventDefault();
 
-  // elements.prepend(createCard(cardForm.elements.title.value, cardForm.elements.link.value));
-
-  let cardElement = new Card(cardForm, '#element');
+  const cardElement = new Card({ title: cardForm.elements.title.value, link: cardForm.elements.link.value }, '#element');
   elements.prepend(cardElement.createCard());
 
   togglePopupWindow(cardWindow);
@@ -169,7 +98,10 @@ function saveCard(e) {
 
 
 /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
-elementsArray.forEach((item) => { elements.append(createCard(item.title, item.link)); });
+elementsArray.forEach((item) => {
+  const cardElement = new Card({ title: item.title, link: item.link }, '#element');
+  elements.append(cardElement.createCard());
+});
 
 
 

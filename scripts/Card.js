@@ -1,10 +1,11 @@
-export default class Card {
-  constructor(cardForm, template) {
-    this._title = cardForm.elements.title.value;
-    this._link = cardForm.elements.link.value;
-    this._template = template;
+import { popupImageContainer, imageWindow, togglePopupWindow } from './index.js';
 
-    console.log(this._title);
+
+export default class Card {
+  constructor(data, template) {
+    this._title = data.title;
+    this._link = data.link;
+    this._template = template;
   }
 
 
@@ -17,10 +18,6 @@ export default class Card {
 
   _zoomImage(e) {
     const element = e.target.closest('.element');
-
-    const popupImageContainer = document.querySelector('.popup__image-container');
-    const imageWindow = popupImageContainer.closest('.popup');
-    const btnImageClose = imageWindow.querySelector('.popup__btn-close');
 
     const popupImage = popupImageContainer.querySelector('.popup__image');
     const popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
