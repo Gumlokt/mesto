@@ -3,8 +3,6 @@ import { cssClasses, toggleButtonState, resetForm } from './validate.js';
 import { elementsArray } from './places.js';
 
 import Card from './Card.js';
-import FormValidator from './FormValidator.js';
-
 
 
 /** All variables */
