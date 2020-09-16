@@ -1,4 +1,4 @@
-import { cssClasses, toggleButtonState, resetForm } from './validate.js';
+import { toggleButtonState, resetForm } from './validate.js';
 
 import { elementsArray } from './places.js';
 
@@ -111,7 +111,7 @@ btnEdit.addEventListener('click', () => {
   profileForm.elements.activity.value = profileActivity.textContent;
 
   const inputList = Array.from(profileForm.elements);
-  toggleButtonState(inputList, profileForm.elements.saveButton, cssClasses.inactiveButtonClass);
+  toggleButtonState(inputList, profileForm.elements.saveButton);
 
   togglePopupWindow(profileWindow);
 });

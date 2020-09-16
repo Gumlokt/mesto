@@ -15,3 +15,4 @@
 * Figma
 * Адаптивный дизайн
 * JavaScript
+* OOP
