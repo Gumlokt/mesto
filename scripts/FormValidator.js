@@ -1,6 +1,3 @@
-import { hideInputError, toggleButtonState } from "./validate.js";
-
-
 export default class FormValidator {
   constructor(cssClasses, formElement) {
     this._cssClasses = cssClasses;
@@ -18,23 +15,23 @@ export default class FormValidator {
   }
 
 
-  // _hideInputError(inputElement) {
-  //   // Находим элемент ошибки
-  //   const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
+  _hideInputError(inputElement) {
+    // Находим элемент ошибки
+    const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);
 
-  //   // Скрываем сообщение об ошибке
-  //   inputElement.classList.remove(this._cssClasses.inputErrorClass);
-  //   errorElement.classList.remove(this._cssClasses.errorClass);
-  //   errorElement.textContent = '';
-  // }
+    // Скрываем сообщение об ошибке
+    inputElement.classList.remove(this._cssClasses.inputErrorClass);
+    errorElement.classList.remove(this._cssClasses.errorClass);
+    errorElement.textContent = '';
+  }
 
 
-  // _hasInvalidInput() {
-  //   return this._inputList.some((inputElement) => {
-  //     // Если поле не валидно, колбэк вернёт true, обход массива прекратится и вся фунцкция hasInvalidInput вернёт true
-  //     return !inputElement.validity.valid;
-  //   })
-  // }
+  _hasInvalidInput() {
+    return this._inputList.some((inputElement) => {
+      // Если поле не валидно, колбэк вернёт true, обход массива прекратится и вся фунцкция hasInvalidInput вернёт true
+      return !inputElement.validity.valid;
+    })
+  }
 
 
   _isValid(inputElement) {
@@ -43,24 +40,23 @@ export default class FormValidator {
       this._showInputError(inputElement);
     } else {
       // hideInputError теперь получает параметром форму, в которой находится проверяемое поле, и само это поле
-      // this._hideInputError(inputElement);
-      hideInputError(this._formElement, inputElement);
+      this._hideInputError(inputElement);
     }
   }
 
 
-  // _toggleButtonState() {
-  //   // Если есть хотя бы один невалидный инпут
-  //   if (this._hasInvalidInput()) {
-  //     // сделай кнопку неактивной
-  //     this._buttonElement.setAttribute('disabled', 'disabled');
-  //     this._buttonElement.classList.add(this._inactiveButtonClass);
-  //   } else {
-  //     // иначе сделай кнопку активной
-  //     this._buttonElement.removeAttribute('disabled');
-  //     this._buttonElement.classList.remove(this._inactiveButtonClass);
-  //   }
-  // }
+  _toggleButtonState() {
+    // Если есть хотя бы один невалидный инпут
+    if (this._hasInvalidInput()) {
+      // сделай кнопку неактивной
+      this._buttonElement.setAttribute('disabled', 'disabled');
+      this._buttonElement.classList.add(this._cssClasses.inactiveButtonClass);
+    } else {
+      // иначе сделай кнопку активной
+      this._buttonElement.removeAttribute('disabled');
+      this._buttonElement.classList.remove(this._cssClasses.inactiveButtonClass);
+    }
+  }
 
 
   _setEventListeners() {
@@ -75,8 +71,7 @@ export default class FormValidator {
         // Внутри колбэка вызовем isValid, передав ей форму и проверяемый элемент
         this._isValid(inputElement);
 
-        // this._toggleButtonState();
-        toggleButtonState(this._inputList, this._buttonElement);
+        this._toggleButtonState();
       });
     });
   }

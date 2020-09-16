@@ -1,7 +1,5 @@
 import { toggleButtonState, resetForm } from './validate.js';
-
 import { elementsArray } from './places.js';
-
 import Card from './Card.js';
 
 
@@ -134,7 +132,11 @@ btnAdd.addEventListener('click', () => {
 btnCardClose.addEventListener('click', () => { togglePopupWindow(cardWindow); });
 
 /** Attaches 'submit' event on the form to save new card. */
-cardForm.addEventListener('submit', saveCard);
+cardForm.addEventListener('submit', (e) => {
+  const inputList = Array.from(cardForm.elements);
+  toggleButtonState(inputList, cardForm.elements.saveButton);
+  saveCard(e); 
+});
 
 
 
