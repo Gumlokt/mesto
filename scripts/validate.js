@@ -11,6 +11,11 @@ const cssClasses = {
   errorClass: 'form__input-error_active'
 };
 
+/**
+ * Select all forms of the page
+ */
+const formList = Array.from(document.querySelectorAll(cssClasses.formSelector));
+
 
 /**
  * Hides error message for editing input.
@@ -18,7 +23,7 @@ const cssClasses = {
  * @param {object} formElement - The form.
  * @param {object} inputElement - The input.
  */
-const hideInputError = (formElement, inputElement) => {
+export const hideInputError = (formElement, inputElement) => {
   // Находим элемент ошибки
   const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
 
@@ -34,7 +39,7 @@ const hideInputError = (formElement, inputElement) => {
  * @function
  * @param {object} inputList - All inputs of the editing form.
  */
-const hasInvalidInput = (inputList) => {
+export const hasInvalidInput = (inputList) => {
   return inputList.some((inputElement) => {
     // Если поле не валидно, колбэк вернёт true, обход массива прекратится и вся фунцкция hasInvalidInput вернёт true
     return !inputElement.validity.valid;
@@ -83,8 +88,11 @@ export function resetForm(formElement) {
 
 
 
-const formList = Array.from(document.querySelectorAll(cssClasses.formSelector));
 
+
+/** 
+ * Starts to validate inputs of the forms
+ */
 formList.forEach((formElement) => {
   const validatingForm = new FormValidator(cssClasses, formElement);
   validatingForm.enableValidation();
