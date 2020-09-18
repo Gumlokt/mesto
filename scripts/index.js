@@ -5,7 +5,6 @@ import Card from './Card.js';
 
 /** All variables */
 const elements = document.querySelector('.elements');
-const elementTemplate = document.querySelector('#element').content;
 
 
 const profileName = document.querySelector('.profile__name');

@@ -10,7 +10,7 @@ export default class Card {
 
 
   _getTemplate() {
-    const newCard = document.querySelector('#element').content.cloneNode(true);
+    const newCard = document.querySelector(this._template).content.cloneNode(true);
 
     return newCard;
   }
@@ -36,11 +36,7 @@ export default class Card {
 
 
   _toggleLike(e) {
-    if(e.target.classList.contains('element__btn-like_clicked')) {
-      e.target.classList.remove('element__btn-like_clicked');
-    } else {
-      e.target.classList.add('element__btn-like_clicked');
-    }
+    e.target.classList.toggle('element__btn-like_clicked');
   }
 
 
