@@ -1,6 +1,7 @@
 import { toggleButtonState, resetForm } from './validate.js';
 import { elementsArray } from './places.js';
 import Card from './Card.js';
+import Section from './Section.js';
 
 
 /** All variables */
@@ -93,10 +94,15 @@ function saveCard(e) {
 
 
 /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
-elementsArray.forEach((item) => {
-  const cardElement = new Card({ title: item.title, link: item.link }, '#element');
-  elements.append(cardElement.createCard());
-});
+const cardList = new Section({
+  items: elementsArray,
+  renderer: (item) => {
+      const cardElement = new Card({ title: item.title, link: item.link }, '#element');
+      cardList.setItem(cardElement.createCard());
+    }
+  }, '.elements');
+
+cardList.renderItems();
 
 
 
