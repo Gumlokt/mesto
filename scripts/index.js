@@ -2,6 +2,8 @@ import { toggleButtonState, resetForm } from './validate.js';
 import { elementsArray } from './places.js';
 import Card from './Card.js';
 import Section from './Section.js';
+import PopupWithImage from './PopupWithImage.js';
+import PopupWithForm from './PopupWithForm.js';
 
 
 /** All variables */
@@ -51,10 +53,10 @@ function catchPressingEscape(e) {
 export function togglePopupWindow(popupWindow) {
   if(popupWindow.classList.contains('popup_opened')) {
     popupWindow.classList.remove('popup_opened');
-    document.removeEventListener('keydown', catchPressingEscape);
+    // document.removeEventListener('keydown', catchPressingEscape);
   } else {
     popupWindow.classList.add('popup_opened');
-    document.addEventListener('keydown', catchPressingEscape);
+    // document.addEventListener('keydown', catchPressingEscape);
   }
 }
 
@@ -127,21 +129,38 @@ profileForm.addEventListener('submit', saveProfile);
 
 
 
+
+const popupWithForm = new PopupWithForm('.form[name="card"]', {
+  submitForm: () => { console.log('Pressed submit btn of the form...'); }
+});
+// popupWithForm.setEventListeners();
+
 /** Attaches 'click' event on the 'Add' button to popup window with creating card form. */
 btnAdd.addEventListener('click', () => {
-  resetForm(cardForm);
-  togglePopupWindow(cardWindow);
+  // resetForm(cardForm);
+  // togglePopupWindow(cardWindow);
+
+  // popupWithForm.setEventListeners()
+  popupWithForm.open();
 });
 
 /** Attaches 'click' event on the 'Close' button of popup window with creating card form. */
-btnCardClose.addEventListener('click', () => { togglePopupWindow(cardWindow); });
+btnCardClose.addEventListener('click', () => {
+  // togglePopupWindow(cardWindow);
+  popupWithForm.close();
+});
 
 /** Attaches 'submit' event on the form to save new card. */
-cardForm.addEventListener('submit', (e) => {
-  const inputList = Array.from(cardForm.elements);
-  toggleButtonState(inputList, cardForm.elements.saveButton);
-  saveCard(e); 
-});
+// cardForm.addEventListener('submit', (e) => {
+//   const inputList = Array.from(cardForm.elements);
+//   toggleButtonState(inputList, cardForm.elements.saveButton);
+//   saveCard(e); 
+// });
+
+
+
+
+
 
 
 
