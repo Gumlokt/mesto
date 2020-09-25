@@ -4,6 +4,7 @@ import Card from './Card.js';
 import Section from './Section.js';
 import PopupWithImage from './PopupWithImage.js';
 import PopupWithForm from './PopupWithForm.js';
+import UserInfo from './UserInfo.js';
 
 
 /** All variables */
@@ -120,15 +121,23 @@ cardList.renderItems();
 
 /** Attaches 'click' event on the 'Edit' button. */
 btnEdit.addEventListener('click', () => {
-  resetForm(profileForm);
+  // resetForm(profileForm);
 
-  profileForm.elements.name.value = profileName.textContent;
-  profileForm.elements.activity.value = profileActivity.textContent;
+  // profileForm.elements.name.value = profileName.textContent;
+  // profileForm.elements.activity.value = profileActivity.textContent;
 
-  const inputList = Array.from(profileForm.elements);
-  toggleButtonState(inputList, profileForm.elements.saveButton);
+  // const inputList = Array.from(profileForm.elements);
+  // toggleButtonState(inputList, profileForm.elements.saveButton);
 
-  togglePopupWindow(profileWindow);
+  // togglePopupWindow(profileWindow);
+
+  const userInfo = new UserInfo({
+    name: '.form__text-input[name="name"]',
+    activity: '.form__text-input[name="activity"]'
+  });
+
+  userInfo.open();
+  console.log(userInfo.getUserInfo());
 });
 
 /** Attaches 'click' event on the 'Close' button of popup window with user profile. */
