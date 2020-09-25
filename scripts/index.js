@@ -23,7 +23,7 @@ const btnProfileClose = profileWindow.querySelector('.popup__btn-close');
 
 const cardForm = document.querySelector('.form[name="card"]');
 const cardWindow = cardForm.closest('.popup');
-const btnCardClose = cardWindow.querySelector('.popup__btn-close');
+
 
 export const popupImageContainer = document.querySelector('.popup__image-container');
 export const imageWindow = popupImageContainer.closest('.popup');
@@ -131,31 +131,25 @@ profileForm.addEventListener('submit', saveProfile);
 
 
 const popupWithForm = new PopupWithForm('.form[name="card"]', {
-  submitForm: () => { console.log('Pressed submit btn of the form...'); }
+  submitForm: () => {
+    const newCard = new Section({
+      items: popupWithForm._getInputValues(),
+      renderer: (item) => {
+          const cardElement = new Card({ title: item.title, link: item.link }, '#element');
+          newCard.setItem(cardElement.createCard());
+        }
+      }, '.elements');
+
+    newCard.renderItems();
+
+    popupWithForm.close();
+  }
 });
-// popupWithForm.setEventListeners();
+
+popupWithForm.setEventListeners();
 
 /** Attaches 'click' event on the 'Add' button to popup window with creating card form. */
-btnAdd.addEventListener('click', () => {
-  // resetForm(cardForm);
-  // togglePopupWindow(cardWindow);
-
-  // popupWithForm.setEventListeners()
-  popupWithForm.open();
-});
-
-/** Attaches 'click' event on the 'Close' button of popup window with creating card form. */
-btnCardClose.addEventListener('click', () => {
-  // togglePopupWindow(cardWindow);
-  popupWithForm.close();
-});
-
-/** Attaches 'submit' event on the form to save new card. */
-// cardForm.addEventListener('submit', (e) => {
-//   const inputList = Array.from(cardForm.elements);
-//   toggleButtonState(inputList, cardForm.elements.saveButton);
-//   saveCard(e); 
-// });
+btnAdd.addEventListener('click', () => { popupWithForm.open(); });
 
 
 

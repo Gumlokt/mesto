@@ -5,8 +5,10 @@ export default class PopupWithImage extends Popup {
     super(popupSelector);
   }
 
-  open() {
-    const open = super.open();
-    return open;
+  open(e) {
+    const openImage = super.open();
+    openImage.atrs = {};
+    console.log(e);
+    return openImage;
   }
 }
