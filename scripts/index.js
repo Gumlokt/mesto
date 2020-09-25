@@ -27,7 +27,6 @@ const cardWindow = cardForm.closest('.popup');
 
 export const popupImageContainer = document.querySelector('.popup__image-container');
 export const imageWindow = popupImageContainer.closest('.popup');
-const btnImageClose = imageWindow.querySelector('.popup__btn-close');
 
 const popupWindowsList = Array.from(document.querySelectorAll('.popup'));
 
@@ -53,10 +52,10 @@ function catchPressingEscape(e) {
 export function togglePopupWindow(popupWindow) {
   if(popupWindow.classList.contains('popup_opened')) {
     popupWindow.classList.remove('popup_opened');
-    // document.removeEventListener('keydown', catchPressingEscape);
+    document.removeEventListener('keydown', catchPressingEscape);
   } else {
     popupWindow.classList.add('popup_opened');
-    // document.addEventListener('keydown', catchPressingEscape);
+    document.addEventListener('keydown', catchPressingEscape);
   }
 }
 
@@ -97,14 +96,25 @@ function saveCard(e) {
 
 /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
 const cardList = new Section({
-  items: elementsArray,
+  items: elementsArray.reverse(),
   renderer: (item) => {
-      const cardElement = new Card({ title: item.title, link: item.link }, '#element');
+      const cardElement = new Card({
+        title: item.title,
+        link: item.link,
+        handleCardClick: (e) => {
+          const popupWithImage = new PopupWithImage('.popup__image-container');
+          popupWithImage.setEventListeners();
+          popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+        }
+      }, '#element');
+
       cardList.setItem(cardElement.createCard());
     }
   }, '.elements');
 
 cardList.renderItems();
+
+
 
 
 
@@ -130,12 +140,23 @@ profileForm.addEventListener('submit', saveProfile);
 
 
 
+
+
 const popupWithForm = new PopupWithForm('.form[name="card"]', {
   submitForm: () => {
     const newCard = new Section({
       items: popupWithForm._getInputValues(),
       renderer: (item) => {
-          const cardElement = new Card({ title: item.title, link: item.link }, '#element');
+          const cardElement = new Card({
+            title: item.title,
+            link: item.link,
+            handleCardClick: (e) => {
+              const popupWithImage = new PopupWithImage('.popup__image-container');
+              popupWithImage.setEventListeners();
+              popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+            }
+          }, '#element');
+
           newCard.setItem(cardElement.createCard());
         }
       }, '.elements');
@@ -158,8 +179,7 @@ btnAdd.addEventListener('click', () => { popupWithForm.open(); });
 
 
 
-/** Attaches 'click' event on the 'Close' button of popup window full sized image. */
-btnImageClose.addEventListener('click', () => { togglePopupWindow(imageWindow); });
+
 
 
 

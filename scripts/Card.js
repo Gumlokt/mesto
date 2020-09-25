@@ -1,10 +1,9 @@
-import { popupImageContainer, imageWindow, togglePopupWindow } from './index.js';
-
-
 export default class Card {
   constructor(data, template) {
     this._title = data.title;
     this._link = data.link;
+    this._handleCardClick = data.handleCardClick; // must be a function
+
     this._template = template;
   }
 
@@ -13,20 +12,6 @@ export default class Card {
     const newCard = document.querySelector(this._template).content.cloneNode(true);
 
     return newCard;
-  }
-
-
-  _zoomImage(e) {
-    const element = e.target.closest('.element');
-
-    const popupImage = popupImageContainer.querySelector('.popup__image');
-    const popupImageTitle = popupImageContainer.querySelector('.popup__image-title');
-
-    popupImage.src = e.target.src;
-    popupImage.alt = e.target.alt.replace('Фото', 'Фото на весь экран');
-    popupImageTitle.textContent = element.querySelector('.element__title').textContent;
-
-    togglePopupWindow(imageWindow);
   }
 
 
@@ -55,7 +40,7 @@ export default class Card {
     cardImage.alt = 'Фото. ' + this._title;
 
 
-    cardImage.addEventListener('click', this._zoomImage);
+    cardImage.addEventListener('click', this._handleCardClick);
     removeButton.addEventListener('click', this._removeElement);
     likeButton.addEventListener('click', this._toggleLike);
 

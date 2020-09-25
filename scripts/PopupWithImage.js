@@ -5,10 +5,16 @@ export default class PopupWithImage extends Popup {
     super(popupSelector);
   }
 
+
   open(e) {
-    const openImage = super.open();
-    openImage.atrs = {};
-    console.log(e);
-    return openImage;
+    super.open();
+    const element = e.target.closest('.element');
+
+    const popupImage = this._popupSelector.querySelector('.popup__image');
+    const popupImageTitle = this._popupSelector.querySelector('.popup__image-title');
+
+    popupImage.src = e.target.src;
+    popupImage.alt = e.target.alt.replace('Фото', 'Фото на весь экран');
+    popupImageTitle.textContent = element.querySelector('.element__title').textContent;
   }
 }

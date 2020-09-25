@@ -4,6 +4,7 @@ export default class FormValidator {
     this._formElement = formElement;
   }
 
+
   _showInputError(inputElement) {
     // Находим элемент ошибки внутри самой функции
     const errorElement = this._formElement.querySelector(`#${inputElement.id}-error`);

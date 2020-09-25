@@ -6,6 +6,7 @@ export default class PopupWithForm extends Popup {
     this._submitForm = submitForm; // this is callback function
   }
 
+
   _getInputValues() {
     this._inputsArray = Array.from(this._popupSelector.querySelectorAll('.form__text-input')); // исправить селектор на переменную!!!
 
@@ -18,11 +19,13 @@ export default class PopupWithForm extends Popup {
     return [ this._inputList ];
   }
 
+
   close() {
     super.close();
     this._popupSelector.reset();
     // добавить очистку ошибок, отображаемых пользователю (см. css-класс .form__input-error)
   }
+
 
   setEventListeners() {
     super.setEventListeners();
