@@ -16,7 +16,16 @@ export default class PopupWithForm extends Popup {
       this._inputList[item.name] = item.value;
     });
 
-    return [ this._inputList ];
+    return this._inputList;
+  }
+
+
+  fillUpInputs(values) {
+    this._inputsArray = Array.from(this._popupSelector.querySelectorAll('.form__text-input')); // исправить селектор на переменную!!!
+
+    this._inputsArray.forEach((item) => {
+      item.value = values[item.name];
+    });
   }
 
 

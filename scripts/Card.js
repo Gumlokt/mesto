@@ -28,17 +28,14 @@ export default class Card {
   createCard() {
     this._card = this._getTemplate();
 
-
     const cardTitle = this._card.querySelector('.element__title');
     const cardImage = this._card.querySelector('.element__image');
     const removeButton = this._card.querySelector('.element__btn-remove');
     const likeButton = this._card.querySelector('.element__btn-like');
 
-
     cardTitle.textContent = this._title;
     cardImage.src = this._link;
     cardImage.alt = 'Фото. ' + this._title;
-
 
     cardImage.addEventListener('click', this._handleCardClick);
     removeButton.addEventListener('click', this._removeElement);

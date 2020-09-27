@@ -1,37 +1,17 @@
-import Popup from './Popup.js';
-
-export default class UserInfo extends Popup {
+export default class UserInfo {
   constructor(selectors) {
-    super(selectors.name);
-    this._name = selectors.name;
-    this._activity = selectors.activity;
-  }
-
-  close() {
-    super.close();
-    this._popupSelector.reset();
-    // добавить очистку ошибок, отображаемых пользователю (см. css-класс .form__input-error)
-  }
-
-
-  setEventListeners() {
-    super.setEventListeners();
-    // this._popupSelector.addEventListener('submit', this._submitForm);
+    this._name = document.querySelector(selectors.name);
+    this._activity = document.querySelector(selectors.activity);
   }
 
 
   getUserInfo() {
-    const profileName = document.querySelector('.profile__name');
-    const profileActivity = document.querySelector('.profile__activity');
-
-    this._userProfile = {};
-
-    this._userProfile.name = profileName.textContent;
-    this._userProfile.activity = profileActivity.textContent;
-
-    return this._userProfile;
+    return { name: this._name.textContent, activity: this._activity.textContent };
   }
 
 
-  setUserInfo() {}
+  setUserInfo(newValues) {
+    this._name.textContent = newValues.name;
+    this._activity.textContent = newValues.activity;
+  }
 }
