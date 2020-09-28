@@ -1,15 +1,15 @@
+import { cssClasses } from './validate.js';
 import Popup from './Popup.js';
 
 export default class PopupWithForm extends Popup {
   constructor(popupSelector, { submitForm }) {
     super(popupSelector);
     this._submitForm = submitForm; // this is callback function
+    this._inputsArray = Array.from(this._popupSelector.querySelectorAll(cssClasses.inputSelector));
   }
 
 
-  _getInputValues() {
-    this._inputsArray = Array.from(this._popupSelector.querySelectorAll('.form__text-input')); // исправить селектор на переменную!!!
-
+    _getInputValues() {
     this._inputList = {};
 
     this._inputsArray.forEach((item) => {
@@ -21,8 +21,6 @@ export default class PopupWithForm extends Popup {
 
 
   fillUpInputs(values) {
-    this._inputsArray = Array.from(this._popupSelector.querySelectorAll('.form__text-input')); // исправить селектор на переменную!!!
-
     this._inputsArray.forEach((item) => {
       item.value = values[item.name];
     });
@@ -32,7 +30,16 @@ export default class PopupWithForm extends Popup {
   close() {
     super.close();
     this._popupSelector.reset();
-    // добавить очистку ошибок, отображаемых пользователю (см. css-класс .form__input-error)
+
+    // очистка ошибок, отображаемых пользователю
+    this._inputsArray.forEach((inputElement) => {
+      const errorElement = this._popupSelector.querySelector(`#${inputElement.id}-error`);
+
+      inputElement.classList.remove(cssClasses.inputErrorClass);
+      errorElement.classList.remove(cssClasses.errorClass);
+      errorElement.textContent = '';
+    });
+
   }
 
 
