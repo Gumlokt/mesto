@@ -1,5 +1,5 @@
-import { cssClasses } from './validate.js';
-import Popup from './Popup.js';
+import { cssClasses, resetForm, toggleButtonState } from '../utils/validate.js';
+import Popup from '../components/Popup.js';
 
 export default class PopupWithForm extends Popup {
   constructor(popupSelector, { submitForm }) {
@@ -24,22 +24,14 @@ export default class PopupWithForm extends Popup {
     this._inputsArray.forEach((item) => {
       item.value = values[item.name];
     });
+
+    toggleButtonState(this._inputsArray, this._popupSelector.elements.saveButton);
   }
 
 
   close() {
     super.close();
-    this._popupSelector.reset();
-
-    // очистка ошибок, отображаемых пользователю
-    this._inputsArray.forEach((inputElement) => {
-      const errorElement = this._popupSelector.querySelector(`#${inputElement.id}-error`);
-
-      inputElement.classList.remove(cssClasses.inputErrorClass);
-      errorElement.classList.remove(cssClasses.errorClass);
-      errorElement.textContent = '';
-    });
-
+    resetForm(this._popupSelector, this._inputsArray);
   }
 
 
