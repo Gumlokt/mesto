@@ -1,4 +1,5 @@
 import { elementsArray } from '../utils/places.js';
+import { cssClasses, resetForm, toggleButtonState } from '../utils/validate.js';
 import Card from '../components/Card.js';
 import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js';
@@ -8,6 +9,7 @@ import './index.css';
 
 
 /** All variables */
+let defaultUserData = { name: 'Жак-Ив Кусто', activity: 'Исследователь океана' };
 const btnEdit = document.querySelector('.profile__btn-edit');
 const btnAdd = document.querySelector('.profile__btn-add');
 
@@ -15,7 +17,7 @@ const btnAdd = document.querySelector('.profile__btn-add');
 
 /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
 const cardList = new Section({
-  items: elementsArray.reverse(),
+  items: elementsArray,
   renderer: (item) => {
       const cardElement = new Card({
         title: item.title,
@@ -27,7 +29,7 @@ const cardList = new Section({
         }
       }, '#element');
 
-      cardList.setItem(cardElement.createCard());
+      cardList.appendItem(cardElement.createCard());
     }
   }, '.elements');
 
@@ -41,6 +43,7 @@ const userInfo = new UserInfo({
   activity: '.profile__activity'
 });
 
+userInfo.setUserInfo(defaultUserData);
 
 
 /** Prepares popup window with form to edit user profile. */
@@ -48,7 +51,10 @@ const profileWithForm = new PopupWithForm('.form[name="profile"]', {
   submitForm: () => {
     userInfo.setUserInfo(profileWithForm._getInputValues());
     profileWithForm.close();
-  }
+  },
+  cssClasses: cssClasses,
+  resetForm: resetForm,
+  toggleButtonState: toggleButtonState
 });
 
 profileWithForm.setEventListeners();
@@ -77,14 +83,17 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
             }
           }, '#element');
 
-          newCard.setItem(cardElement.createCard());
+          newCard.prependItem(cardElement.createCard());
         }
       }, '.elements');
 
     newCard.renderItems();
 
     cardWithForm.close();
-  }
+  },
+  cssClasses: cssClasses,
+  resetForm: resetForm,
+  toggleButtonState: toggleButtonState
 });
 
 cardWithForm.setEventListeners();

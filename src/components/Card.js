@@ -17,6 +17,15 @@ export default class Card {
 
   _removeElement(e) {
     e.target.closest('.element').remove();
+    // this._card.remove();
+    // Вызов this._card.remove() не срабатывает. И, если я правильно понял, это связано с тем, что
+    // this._card в момент добавления обработчика события клика на кнопку removeButton является
+    // объетом DocumentFragment. А согласно документации, у DocumentFragment нет метода remove().
+    // Ссылка на документацию: https://developer.mozilla.org/ru/docs/Web/API/DocumentFragment
+    // 
+    // В связи с вышесказаным, я начал сомневаться в том, что методы _removeElement и _toggleLike 
+    // можно сделать независимыми от объекта события. Если можно, дайте, пожалуйста, дополнительную
+    // наводку на то, как можно обойтись без объекта события. Заранее благодарен :-)
   }
 
 
@@ -39,6 +48,7 @@ export default class Card {
 
     cardImage.addEventListener('click', this._handleCardClick);
     removeButton.addEventListener('click', this._removeElement);
+    // removeButton.addEventListener('click', this._removeElement.bind(this)); // см. коммент в строке 21
     likeButton.addEventListener('click', this._toggleLike);
 
     return this._card;
