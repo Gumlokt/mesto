@@ -5,6 +5,7 @@ import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import UserInfo from '../components/UserInfo.js';
+import Api from '../components/Api.js';
 import './index.css';
 
 
@@ -13,6 +14,48 @@ let defaultUserData = { name: 'Жак-Ив Кусто', activity: 'Исслед�
 const btnEdit = document.querySelector('.profile__btn-edit');
 const btnAdd = document.querySelector('.profile__btn-add');
 
+fetch('https://mesto.nomoreparties.co/v1/cohort-16/cards', {
+  headers: {
+    authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678'
+  }
+}).then((res) => {
+  console.log(res);
+  if (res.ok) {
+    return res.json();
+  }
+
+  return Promise.reject("Произошла ошибка, данные не получены...");
+}).then((data) => {
+  console.log(data);
+}).catch((err) => {
+  console.log(err);
+})
+;
+
+// fetch('https://mesto.nomoreparties.co/v1/cohort-16/cards', {
+//   headers: {
+//     authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678'
+//   }
+// })
+//   .then(res => res.json())
+//   .then((result) => {
+//     console.log(result);
+//   });
+
+
+// const api = new Api({
+//   url: "https://mesto.nomoreparties.co/v1/cohort-16/cards",
+//   headers: {
+// 		authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678',
+//     "Content-Type": "application/json",
+//   },
+// });
+
+
+// const initialCards = api.getInitialCards();
+// initialCards.then((data) => {
+//   console.log(data);
+// }).catch((err) => alert(err));
 
 
 /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
