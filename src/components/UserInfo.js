@@ -1,14 +1,14 @@
 export default class UserInfo {
   constructor(selectors) {
     this._name = document.querySelector(selectors.name);
-    this._activity = document.querySelector(selectors.activity);
+    this._about = document.querySelector(selectors.about);
     this._sourceOfTruthAboutUser = {}; // Вот он, тот самый "один источник правды" ;-)
   }
 
 
   _renderUserInfo() {
     this._name.textContent = this._sourceOfTruthAboutUser.name;
-    this._activity.textContent = this._sourceOfTruthAboutUser.activity;
+    this._about.textContent = this._sourceOfTruthAboutUser.about;
   }
 
 
@@ -19,7 +19,7 @@ export default class UserInfo {
 
   setUserInfo(newValues) {
     this._sourceOfTruthAboutUser.name = newValues.name;
-    this._sourceOfTruthAboutUser.activity = newValues.activity;
+    this._sourceOfTruthAboutUser.about = newValues.about;
 
     this._renderUserInfo();
   }

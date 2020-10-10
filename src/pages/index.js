@@ -10,89 +10,88 @@ import './index.css';
 
 
 /** All variables */
-let defaultUserData = { name: 'Жак-Ив Кусто', activity: 'Исследователь океана' };
 const btnEdit = document.querySelector('.profile__btn-edit');
 const btnAdd = document.querySelector('.profile__btn-add');
 
-fetch('https://mesto.nomoreparties.co/v1/cohort-16/cards', {
+
+
+
+const userApi = new Api({
+  url: "https://mesto.nomoreparties.co/v1/cohort-16/users/me",
   headers: {
-    authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678'
-  }
-}).then((res) => {
-  console.log(res);
-  if (res.ok) {
-    return res.json();
-  }
-
-  return Promise.reject("Произошла ошибка, данные не получены...");
-}).then((data) => {
-  console.log(data);
-}).catch((err) => {
-  console.log(err);
-})
-;
-
-// fetch('https://mesto.nomoreparties.co/v1/cohort-16/cards', {
-//   headers: {
-//     authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678'
-//   }
-// })
-//   .then(res => res.json())
-//   .then((result) => {
-//     console.log(result);
-//   });
+		authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678',
+    "Content-Type": "application/json",
+  },
+});
 
 
-// const api = new Api({
-//   url: "https://mesto.nomoreparties.co/v1/cohort-16/cards",
-//   headers: {
-// 		authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678',
-//     "Content-Type": "application/json",
-//   },
-// });
+const cardsApi = new Api({
+  url: "https://mesto.nomoreparties.co/v1/cohort-16/cards",
+  headers: {
+		authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678',
+    "Content-Type": "application/json",
+  },
+});
 
 
-// const initialCards = api.getInitialCards();
-// initialCards.then((data) => {
-//   console.log(data);
-// }).catch((err) => alert(err));
+const getUserInfoPromise = userApi.getUserInfo();
+const getInitialCardsPromise = cardsApi.getInitialCards();
 
 
+
+getInitialCardsPromise.then((data) => {
 /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
-const cardList = new Section({
-  items: elementsArray,
-  renderer: (item) => {
-      const cardElement = new Card({
-        title: item.title,
-        link: item.link,
-        handleCardClick: (e) => {
-          const popupWithImage = new PopupWithImage('.popup__image-container');
-          popupWithImage.setEventListeners();
-          popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
-        }
-      }, '#element');
+console.log(data[29].likes.length);
 
-      cardList.appendItem(cardElement.createCard());
-    }
-  }, '.elements');
+  const cardList = new Section({
+    items: data,
+    renderer: (item) => {
+        const cardElement = new Card({
+          name: item.name,
+          link: item.link,
+          likes: item.likes.length,
+          handleCardClick: (e) => {
+            const popupWithImage = new PopupWithImage('.popup__image-container');
+            popupWithImage.setEventListeners();
+            popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+          }
+        }, '#element');
 
-cardList.renderItems();
+        cardList.appendItem(cardElement.createCard());
+      }
+    }, '.elements');
+
+  cardList.renderItems();
+}).catch((err) => { console.log(err); });
+
+
 
 
 
 /** Object with methods to get and set user profile data. */
 const userInfo = new UserInfo({
   name: '.profile__name',
-  activity: '.profile__activity'
+  about: '.profile__about'
 });
 
-userInfo.setUserInfo(defaultUserData);
+getUserInfoPromise.then((data) => {
+  userInfo.setUserInfo(data);
+  }).catch((err) => { console.log(err); });
+
 
 
 /** Prepares popup window with form to edit user profile. */
 const profileWithForm = new PopupWithForm('.form[name="profile"]', {
   submitForm: () => {
-    userInfo.setUserInfo(profileWithForm._getInputValues());
+    const inputValues = profileWithForm._getInputValues();
+
+    const setUserInfoPromise = userApi.setUserInfo(inputValues);
+
+    setUserInfoPromise.then((data) => {
+      userInfo.setUserInfo(data);
+      }).catch((err) => { console.log(err); });
+
+    // userInfo.setUserInfo(inputValues);
     profileWithForm.close();
   },
   cssClasses: cssClasses,
@@ -113,24 +112,35 @@ btnEdit.addEventListener('click', () => {
 /** Prepares popup window with form to add new card. */
 const cardWithForm = new PopupWithForm('.form[name="card"]', {
   submitForm: () => {
-    const newCard = new Section({
-      items: [ cardWithForm._getInputValues() ],
-      renderer: (item) => {
-          const cardElement = new Card({
-            title: item.title,
-            link: item.link,
-            handleCardClick: (e) => {
-              const popupWithImage = new PopupWithImage('.popup__image-container');
-              popupWithImage.setEventListeners();
-              popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
-            }
-          }, '#element');
+    const inputValues = cardWithForm._getInputValues();
 
-          newCard.prependItem(cardElement.createCard());
-        }
-      }, '.elements');
+    const addCardPromiese = cardsApi.addCard(inputValues);
 
-    newCard.renderItems();
+    addCardPromiese.then((data) => {
+      console.log(data);
+
+      // userInfo.setUserInfo(data);
+      const newCard = new Section({
+        items: [ data ],
+        renderer: (item) => {
+            const cardElement = new Card({
+              name: item.name,
+              link: item.link,
+              likes: item.likes.length,
+              handleCardClick: (e) => {
+                const popupWithImage = new PopupWithImage('.popup__image-container');
+                popupWithImage.setEventListeners();
+                popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+              }
+            }, '#element');
+
+            newCard.prependItem(cardElement.createCard());
+          }
+        }, '.elements');
+
+        newCard.renderItems();
+      }).catch((err) => { console.log(err); });
+
 
     cardWithForm.close();
   },

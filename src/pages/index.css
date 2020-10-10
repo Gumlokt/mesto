@@ -21,7 +21,7 @@
 @import url(../blocks/profile/__info/profile__info.css);
 @import url(../blocks/profile/__name/profile__name.css);
 @import url(../blocks/profile/__btn-edit/profile__btn-edit.css);
-@import url(../blocks/profile/__activity/profile__activity.css);
+@import url(../blocks/profile/__about/profile__about.css);
 @import url(../blocks/profile/__btn-add/profile__btn-add.css);
 
 /* Section: elements */
@@ -32,7 +32,9 @@
 @import url(../blocks/element/__btn-remove/element__btn-remove.css);
 @import url(../blocks/element/__body/element__body.css);
 @import url(../blocks/element/__title/element__title.css);
+@import url(../blocks/element/__like-zone/element__like-zone.css);
 @import url(../blocks/element/__btn-like/element__btn-like.css);
+@import url(../blocks/element/__likes/element__likes.css);
 @import url(../blocks/element/__btn-like/_clicked/element__btn-like_clicked.css);
 
 /* Footer */

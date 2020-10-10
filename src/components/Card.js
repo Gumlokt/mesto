@@ -1,7 +1,8 @@
 export default class Card {
   constructor(data, template) {
-    this._title = data.title;
+    this._name = data.name;
     this._link = data.link;
+    this._likes = data.likes,
     this._handleCardClick = data.handleCardClick; // must be a function
 
     this._template = template;
@@ -32,10 +33,12 @@ export default class Card {
     const cardImage = this._card.querySelector('.element__image');
     const removeButton = this._card.querySelector('.element__btn-remove');
     this._likeButton = this._card.querySelector('.element__btn-like');
+    const totalLikes = this._card.querySelector('.element__likes');
 
-    cardTitle.textContent = this._title;
+    cardTitle.textContent = this._name;
     cardImage.src = this._link;
-    cardImage.alt = 'Фото. ' + this._title;
+    cardImage.alt = 'Фото. ' + this._name;
+    totalLikes.textContent = this._likes;
 
     cardImage.addEventListener('click', this._handleCardClick);
     removeButton.addEventListener('click', () => { this._removeElement(); });

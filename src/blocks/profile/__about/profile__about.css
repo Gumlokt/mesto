@@ -1,4 +1,4 @@
-.profile__activity {
+.profile__about {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -11,13 +11,13 @@
 }
 
 @media screen and (max-width: 920px) {
-  .profile__activity {
+  .profile__about {
     max-width: 392px;
   }
 }
 
 @media screen and (max-width: 620px) {
-  .profile__activity {
+  .profile__about {
     grid-column: 1/3;
     font-size: 14px;
     line-height: 17px;
