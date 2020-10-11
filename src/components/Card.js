@@ -1,9 +1,12 @@
 export default class Card {
   constructor(data, template) {
+    this._id = data._id;
     this._name = data.name;
     this._link = data.link;
     this._likes = data.likes,
+    this._isOwner = data.isOwner,
     this._handleCardClick = data.handleCardClick; // must be a function
+    this._handleCardDeletion = data.handleCardDeletion; // must be a function
 
     this._template = template;
   }
@@ -41,8 +44,14 @@ export default class Card {
     totalLikes.textContent = this._likes;
 
     cardImage.addEventListener('click', this._handleCardClick);
-    removeButton.addEventListener('click', () => { this._removeElement(); });
     this._likeButton.addEventListener('click', () => { this._toggleLike(); });
+
+    if(this._isOwner) {
+      // removeButton.addEventListener('click', () => { this._removeElement(); });
+      removeButton.addEventListener('click', () => { this._handleCardDeletion(); });
+    } else {
+      removeButton.remove();
+    }
 
     return this._card;
   }

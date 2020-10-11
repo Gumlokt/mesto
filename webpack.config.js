@@ -54,5 +54,6 @@ module.exports = {
       template: './src/index.html' // путь к файлу index.html
     }),
     new MiniCssExtractPlugin() // подключение плагина для объединения файлов
-  ]
+  ],
+  devtool: 'source-map'
 }

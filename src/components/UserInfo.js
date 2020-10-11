@@ -18,6 +18,7 @@ export default class UserInfo {
 
 
   setUserInfo(newValues) {
+    this._sourceOfTruthAboutUser._id = newValues._id;
     this._sourceOfTruthAboutUser.name = newValues.name;
     this._sourceOfTruthAboutUser.about = newValues.about;
 

@@ -4,6 +4,7 @@ import Card from '../components/Card.js';
 import Section from '../components/Section.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithSubmit from '../components/PopupWithSubmit.js';
 import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api.js';
 import './index.css';
@@ -39,35 +40,6 @@ const getInitialCardsPromise = cardsApi.getInitialCards();
 
 
 
-getInitialCardsPromise.then((data) => {
-/** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
-console.log(data[29].likes.length);
-
-  const cardList = new Section({
-    items: data,
-    renderer: (item) => {
-        const cardElement = new Card({
-          name: item.name,
-          link: item.link,
-          likes: item.likes.length,
-          handleCardClick: (e) => {
-            const popupWithImage = new PopupWithImage('.popup__image-container');
-            popupWithImage.setEventListeners();
-            popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
-          }
-        }, '#element');
-
-        cardList.appendItem(cardElement.createCard());
-      }
-    }, '.elements');
-
-  cardList.renderItems();
-}).catch((err) => { console.log(err); });
-
-
-
-
-
 /** Object with methods to get and set user profile data. */
 const userInfo = new UserInfo({
   name: '.profile__name',
@@ -77,6 +49,57 @@ const userInfo = new UserInfo({
 getUserInfoPromise.then((data) => {
   userInfo.setUserInfo(data);
   }).catch((err) => { console.log(err); });
+
+
+
+
+/** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
+getInitialCardsPromise.then((data) => {
+console.log(data);
+
+  const cardList = new Section({
+    items: data, // pass here array of objects from server
+    renderer: (item) => {
+      const cardElement = new Card({
+        _id: item._id,
+        name: item.name,
+        link: item.link,
+        likes: item.likes.length,
+        isOwner: userInfo.getUserInfo()._id === item.owner._id ? true : false,
+        handleCardClick: (e) => {
+          const popupWithImage = new PopupWithImage('.popup__image-container');
+          popupWithImage.setEventListeners();
+          popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+        },
+        handleCardDeletion: () => {
+          const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
+            submitForm: () => {
+              // console.log('card id: ' + cardElement._id);
+              console.log('card id: ' + cardElement._id);
+
+              const deleteCardPromise = cardsApi.deleteCard(cardElement._id);
+
+              deleteCardPromise.then((data) => {
+                return cardElement._removeElement();
+              }).catch((err) => { console.log(err); });
+
+              popupConfirmDeletion.close();
+            }
+          });
+
+          popupConfirmDeletion.setEventListeners();
+          popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+        }
+      }, '#element');
+
+      cardList.appendItem(cardElement.createCard());
+    }
+  }, '.elements');
+
+  cardList.renderItems();
+}).catch((err) => { console.log(err); });
+
+
 
 
 
@@ -91,7 +114,6 @@ const profileWithForm = new PopupWithForm('.form[name="profile"]', {
       userInfo.setUserInfo(data);
       }).catch((err) => { console.log(err); });
 
-    // userInfo.setUserInfo(inputValues);
     profileWithForm.close();
   },
   cssClasses: cssClasses,
@@ -123,23 +145,41 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
       const newCard = new Section({
         items: [ data ],
         renderer: (item) => {
-            const cardElement = new Card({
-              name: item.name,
-              link: item.link,
-              likes: item.likes.length,
-              handleCardClick: (e) => {
-                const popupWithImage = new PopupWithImage('.popup__image-container');
-                popupWithImage.setEventListeners();
-                popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
-              }
-            }, '#element');
+          const cardElement = new Card({
+            _id: item._id,
+            name: item.name,
+            link: item.link,
+            likes: item.likes.length,
+            isOwner: userInfo.getUserInfo()._id === item.owner._id ? true : false,
+            handleCardClick: (e) => {
+              const popupWithImage = new PopupWithImage('.popup__image-container');
+              popupWithImage.setEventListeners();
+              popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+            },
+            handleCardDeletion: () => {
+              const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
+                submitForm: () => {
+                  const deleteCardPromise = cardsApi.deleteCard(cardElement._id);
 
-            newCard.prependItem(cardElement.createCard());
-          }
-        }, '.elements');
+                  deleteCardPromise.then((data) => {
+                    return cardElement._removeElement();
+                  }).catch((err) => { console.log(err); });
 
-        newCard.renderItems();
-      }).catch((err) => { console.log(err); });
+                  popupConfirmDeletion.close();
+                }
+              });
+
+              popupConfirmDeletion.setEventListeners();
+              popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+            }
+          }, '#element');
+
+          newCard.prependItem(cardElement.createCard());
+        }
+      }, '.elements');
+
+      newCard.renderItems();
+    }).catch((err) => { console.log(err); });
 
 
     cardWithForm.close();
