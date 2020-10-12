@@ -17,8 +17,8 @@ const btnAdd = document.querySelector('.profile__btn-add');
 
 
 
-const userApi = new Api({
-  url: "https://mesto.nomoreparties.co/v1/cohort-16/users/me",
+const appApi = new Api({
+  url: "https://mesto.nomoreparties.co/v1/cohort-16",
   headers: {
 		authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678',
     "Content-Type": "application/json",
@@ -26,17 +26,8 @@ const userApi = new Api({
 });
 
 
-const cardsApi = new Api({
-  url: "https://mesto.nomoreparties.co/v1/cohort-16/cards",
-  headers: {
-		authorization: '7e8aae9c-bb81-4fe9-ac24-f206bc985678',
-    "Content-Type": "application/json",
-  },
-});
-
-
-const getUserInfoPromise = userApi.getUserInfo();
-const getInitialCardsPromise = cardsApi.getInitialCards();
+const getUserInfoPromise = appApi.getUserInfo();
+const getInitialCardsPromise = appApi.getInitialCards();
 
 
 
@@ -55,29 +46,40 @@ getUserInfoPromise.then((data) => {
 
 /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
 getInitialCardsPromise.then((data) => {
-console.log(data);
-
   const cardList = new Section({
     items: data, // pass here array of objects from server
     renderer: (item) => {
       const cardElement = new Card({
-        _id: item._id,
-        name: item.name,
-        link: item.link,
-        likes: item.likes.length,
-        isOwner: userInfo.getUserInfo()._id === item.owner._id ? true : false,
+        cardData: item,
+        userInfo: userInfo.getUserInfo(),
         handleCardClick: (e) => {
           const popupWithImage = new PopupWithImage('.popup__image-container');
           popupWithImage.setEventListeners();
           popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
         },
+        handleLikeClick: (cardId) => {
+          if(cardElement._checkIfLiked()) {
+            const unsetLikePromise = appApi.unsetLike(cardId);
+
+            unsetLikePromise.then((data) => {
+              cardElement._cardData = data;
+              cardElement._toggleLike(data.likes.length);
+            }).catch((err) => { console.log(err); });
+          } else {
+            const setLikePromise = appApi.setLike(cardId);
+
+            setLikePromise.then((data) => {
+              cardElement._cardData = data;
+              cardElement._toggleLike(data.likes.length);
+            }).catch((err) => { console.log(err); });
+          }
+        },
         handleCardDeletion: () => {
           const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
             submitForm: () => {
-              // console.log('card id: ' + cardElement._id);
               console.log('card id: ' + cardElement._id);
 
-              const deleteCardPromise = cardsApi.deleteCard(cardElement._id);
+              const deleteCardPromise = appApi.deleteCard(cardElement._id);
 
               deleteCardPromise.then((data) => {
                 return cardElement._removeElement();
@@ -108,7 +110,7 @@ const profileWithForm = new PopupWithForm('.form[name="profile"]', {
   submitForm: () => {
     const inputValues = profileWithForm._getInputValues();
 
-    const setUserInfoPromise = userApi.setUserInfo(inputValues);
+    const setUserInfoPromise = appApi.setUserInfo(inputValues);
 
     setUserInfoPromise.then((data) => {
       userInfo.setUserInfo(data);
@@ -136,30 +138,41 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
   submitForm: () => {
     const inputValues = cardWithForm._getInputValues();
 
-    const addCardPromiese = cardsApi.addCard(inputValues);
+    const addCardPromiese = appApi.addCard(inputValues);
 
     addCardPromiese.then((data) => {
-      console.log(data);
-
-      // userInfo.setUserInfo(data);
       const newCard = new Section({
         items: [ data ],
         renderer: (item) => {
           const cardElement = new Card({
-            _id: item._id,
-            name: item.name,
-            link: item.link,
-            likes: item.likes.length,
-            isOwner: userInfo.getUserInfo()._id === item.owner._id ? true : false,
+            cardData: item,
+            userInfo: userInfo.getUserInfo(),
             handleCardClick: (e) => {
               const popupWithImage = new PopupWithImage('.popup__image-container');
               popupWithImage.setEventListeners();
               popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
             },
+            handleLikeClick: (cardId) => {
+              if(cardElement._checkIfLiked()) {
+                const unsetLikePromise = appApi.unsetLike(cardId);
+    
+                unsetLikePromise.then((data) => {
+                  cardElement._cardData = data;
+                  cardElement._toggleLike(data.likes.length);
+                }).catch((err) => { console.log(err); });
+              } else {
+                const setLikePromise = appApi.setLike(cardId);
+    
+                setLikePromise.then((data) => {
+                  cardElement._cardData = data;
+                  cardElement._toggleLike(data.likes.length);
+                }).catch((err) => { console.log(err); });
+              }
+            },
             handleCardDeletion: () => {
               const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
                 submitForm: () => {
-                  const deleteCardPromise = cardsApi.deleteCard(cardElement._id);
+                  const deleteCardPromise = appApi.deleteCard(cardElement._id);
 
                   deleteCardPromise.then((data) => {
                     return cardElement._removeElement();

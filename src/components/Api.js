@@ -6,7 +6,7 @@ export default class Api {
 
 
   getInitialCards() {
-    return fetch(this._url, {
+    return fetch(`${this._url}/cards`, {
       headers: this._headers,
     }).then((res) => {
       if (res.ok) {
@@ -19,7 +19,7 @@ export default class Api {
 
 
   addCard(data) {
-    return fetch(this._url, {
+    return fetch(`${this._url}/cards`, {
       method: "POST",
       headers: this._headers,
       body: JSON.stringify(data),
@@ -36,7 +36,7 @@ export default class Api {
 
 
   deleteCard(id) {
-    return fetch(`${this._url}/${id}`, {
+    return fetch(`${this._url}/cards/${id}`, {
       method: "DELETE",
       headers: this._headers,
     }).then((res) => {
@@ -50,7 +50,7 @@ export default class Api {
 
 
   getUserInfo() {
-    return fetch(this._url, {
+    return fetch(`${this._url}/users/me`, {
       headers: this._headers,
     }).then((res) => {
       if (res.ok) {
@@ -63,7 +63,7 @@ export default class Api {
 
 
   setUserInfo(data) {
-    return fetch(this._url, {
+    return fetch(`${this._url}/users/me`, {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify(data),
@@ -82,12 +82,31 @@ export default class Api {
   }
 
 
-  setLike() {
-    // ...
+  setLike(id) {
+    return fetch(`${this._url}/cards/likes/${id}`, {
+      method: "PUT",
+      headers: this._headers,
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject("Произошла ошибка, лайк не поставлен...");
+    });
   }
 
 
-  unsetLike() {
-    // ...
+  unsetLike(id) {
+    return fetch(`${this._url}/cards/likes/${id}`, {
+      method: "DELETE",
+      headers: this._headers,
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject("Произошла ошибка, лайк не удалён...");
+    });
+
   }
 }
