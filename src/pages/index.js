@@ -11,6 +11,7 @@ import './index.css';
 
 
 /** All variables */
+const btnEditAvatar = document.querySelector('.profile__btn-edit-avatar');
 const btnEdit = document.querySelector('.profile__btn-edit');
 const btnAdd = document.querySelector('.profile__btn-add');
 
@@ -102,6 +103,34 @@ getInitialCardsPromise.then((data) => {
 }).catch((err) => { console.log(err); });
 
 
+
+
+
+/** Prepares popup window with form to edit user avatar. */
+const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
+  submitForm: () => {
+    const inputValues = profileWithAvatarForm._getInputValues();
+
+    const setUserInfoPromise = appApi.setUserInfo(inputValues);
+
+    setUserInfoPromise.then((data) => {
+      userInfo.setUserInfo(data);
+      }).catch((err) => { console.log(err); });
+
+    profileWithAvatarForm.close();
+  },
+  cssClasses: cssClasses,
+  resetForm: resetForm,
+  toggleButtonState: toggleButtonState
+});
+
+profileWithAvatarForm.setEventListeners();
+
+/** Attaches 'click' event on the 'Edit Avatar' button. */
+btnEditAvatar.addEventListener('click', () => {
+  // profileWithAvatarForm.fillUpInputs(userInfo.getUserInfo());
+  profileWithAvatarForm.open();
+});
 
 
 

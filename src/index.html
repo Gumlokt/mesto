@@ -21,7 +21,9 @@
     <main class="content">
       <section class="profile">
         <div class="profile__data">
-          <img src="./images/cousteau.jpg" alt="Аватарка (фото) владельца профиля" class="profile__avatar">
+          <button class="profile__btn-edit-avatar">
+            <img src="./images/cousteau.jpg" alt="Аватарка (фото) владельца профиля" class="profile__avatar">
+          </button>
 
           <div class="profile__info">
             <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -46,6 +48,22 @@
     </footer>
   </div>
 
+
+
+  <div class="popup">
+    <div class="popup__container">
+      <button class="popup__btn-close" type="button" aria-label="Закрыть окно"></button>
+
+      <form class="form" name="avatar" novalidate>
+        <h2 class="form__title">Обновить аватар</h2>
+
+        <input type="url" class="form__text-input" name="avatar" value="" placeholder="Ссылка на аватарку" id="avatar" required>
+        <span class="form__input-error" id="avatar-error"></span>
+
+        <button class="form__btn-save" name="saveButton">Сохранить</button>
+      </form>
+    </div>
+  </div>
 
 
   <div class="popup">

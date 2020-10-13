@@ -78,7 +78,17 @@ export default class Api {
 
 
   setAvatar() {
-    // ...
+    return fetch(`${this._url}/users/me/avatar`, {
+      method: "PATCH",
+      headers: this._headers,
+      body: JSON.stringify(data),
+    }).then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+
+      return Promise.reject("Произошла ошибка, данные пользователя не обновлены...");
+    });
   }
 
 
