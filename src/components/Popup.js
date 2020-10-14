@@ -18,6 +18,21 @@ export default class Popup {
   }
 
 
+  _changeBtnState() {
+    this._btnSave.textContent = 'Сохранение...';
+  }
+
+
+  _restoreBtnState() {
+    this._btnSave.textContent = 'Сохранить';
+  }
+
+
+  _setBtnSaveText(text) {
+    this._btnSave.textContent = text;
+  }
+
+
   _handleEscClose(e) {
     if (e.key === 'Escape') {
       this.close();

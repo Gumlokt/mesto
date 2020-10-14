@@ -37,11 +37,10 @@ const userInfo = new UserInfo({
   name: '.profile__name', // Jacques-Yves Cousteau
   about: '.profile__about', // Sailor, researcher
   avatar: '.profile__avatar' // https://pictures.s3.yandex.net/frontend-developer/common/ava.jpg
+  // https://images.unsplash.com/photo-1590787996529-a542c86ca267?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2700&q=80
 });
 
 getUserInfoPromise.then((data) => {
-  console.log(data);
-
   userInfo.setUserInfo(data);
   }).catch((err) => { console.log(err); });
 
@@ -81,8 +80,6 @@ getInitialCardsPromise.then((data) => {
         handleCardDeletion: () => {
           const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
             submitForm: () => {
-              console.log('card id: ' + cardElement._id);
-
               const deleteCardPromise = appApi.deleteCard(cardElement._id);
 
               deleteCardPromise.then((data) => {
@@ -110,17 +107,19 @@ getInitialCardsPromise.then((data) => {
 /** Prepares popup window with form to edit user avatar. */
 const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
   submitForm: () => {
+    // profileWithAvatarForm._changeBtnState();
+    profileWithAvatarForm._setBtnSaveText('Сохранение...');
+
     const newAvatarLink = profileWithAvatarForm._getInputValues();
 
     const setUserAvatarPromise = appApi.setAvatar(newAvatarLink);
 
     setUserAvatarPromise.then((data) => {
-      console.log(data);
-
-      userInfo.setUserInfo(data);
+        userInfo.setUserInfo(data);
+        // profileWithAvatarForm._restoreBtnState();
+        profileWithAvatarForm._setBtnSaveText('Сохранить');
+        profileWithAvatarForm.close();
       }).catch((err) => { console.log(err); });
-
-    profileWithAvatarForm.close();
   },
   cssClasses: cssClasses,
   resetForm: resetForm,
@@ -140,15 +139,19 @@ btnEditAvatar.addEventListener('click', () => {
 /** Prepares popup window with form to edit user profile. */
 const profileWithForm = new PopupWithForm('.form[name="profile"]', {
   submitForm: () => {
+    // profileWithForm._changeBtnState();
+    profileWithForm._setBtnSaveText('Сохранение...');
+
     const inputValues = profileWithForm._getInputValues();
 
     const setUserInfoPromise = appApi.setUserInfo(inputValues);
 
     setUserInfoPromise.then((data) => {
-      userInfo.setUserInfo(data);
+        userInfo.setUserInfo(data);
+        // profileWithForm._restoreBtnState();
+        profileWithForm._setBtnSaveText('Сохранить');
+        profileWithForm.close();
       }).catch((err) => { console.log(err); });
-
-    profileWithForm.close();
   },
   cssClasses: cssClasses,
   resetForm: resetForm,
@@ -168,6 +171,9 @@ btnEdit.addEventListener('click', () => {
 /** Prepares popup window with form to add new card. */
 const cardWithForm = new PopupWithForm('.form[name="card"]', {
   submitForm: () => {
+    // cardWithForm._changeBtnState();
+    cardWithForm._setBtnSaveText('Создание...');
+
     const inputValues = cardWithForm._getInputValues();
 
     const addCardPromiese = appApi.addCard(inputValues);
@@ -224,10 +230,10 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
       }, '.elements');
 
       newCard.renderItems();
+      // cardWithForm._restoreBtnState();
+      cardWithForm._setBtnSaveText('Создать');
+      cardWithForm.close();
     }).catch((err) => { console.log(err); });
-
-
-    cardWithForm.close();
   },
   cssClasses: cssClasses,
   resetForm: resetForm,

@@ -9,6 +9,7 @@ export default class PopupWithForm extends Popup {
     this._resetForm = resetForm;
     this._toggleButtonState = toggleButtonState;
 
+    this._btnSave = this._popupSelector.querySelector(cssClasses.submitButtonSelector);
     this._inputsArray = Array.from(this._popupSelector.querySelectorAll(this._cssClasses.inputSelector));
   }
 
