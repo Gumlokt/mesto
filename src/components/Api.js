@@ -77,7 +77,7 @@ export default class Api {
   }
 
 
-  setAvatar() {
+  setAvatar(data) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: "PATCH",
       headers: this._headers,
@@ -87,7 +87,7 @@ export default class Api {
         return res.json();
       }
 
-      return Promise.reject("Произошла ошибка, данные пользователя не обновлены...");
+      return Promise.reject("Произошла ошибка, аватар пользователя не обновлён...");
     });
   }
 

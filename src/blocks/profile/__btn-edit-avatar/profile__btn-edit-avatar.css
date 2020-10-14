@@ -22,13 +22,14 @@
   height: 100%;
   background-color: #000;
   opacity: 0;
+  transition: opacity .4s linear;
 }
 
 .profile__btn-edit-avatar:hover::before {
   opacity: .8;
 
   background-image: url(../../../images/icons/icon-pencil.svg);
-  background-size: 27px;
+  background-size: 26px;
   background-position: center;
   background-repeat: no-repeat;
 }

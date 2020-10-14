@@ -34,11 +34,14 @@ const getInitialCardsPromise = appApi.getInitialCards();
 
 /** Object with methods to get and set user profile data. */
 const userInfo = new UserInfo({
-  name: '.profile__name',
-  about: '.profile__about'
+  name: '.profile__name', // Jacques-Yves Cousteau
+  about: '.profile__about', // Sailor, researcher
+  avatar: '.profile__avatar' // https://pictures.s3.yandex.net/frontend-developer/common/ava.jpg
 });
 
 getUserInfoPromise.then((data) => {
+  console.log(data);
+
   userInfo.setUserInfo(data);
   }).catch((err) => { console.log(err); });
 
@@ -104,16 +107,16 @@ getInitialCardsPromise.then((data) => {
 
 
 
-
-
 /** Prepares popup window with form to edit user avatar. */
 const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
   submitForm: () => {
-    const inputValues = profileWithAvatarForm._getInputValues();
+    const newAvatarLink = profileWithAvatarForm._getInputValues();
 
-    const setUserInfoPromise = appApi.setUserInfo(inputValues);
+    const setUserAvatarPromise = appApi.setAvatar(newAvatarLink);
 
-    setUserInfoPromise.then((data) => {
+    setUserAvatarPromise.then((data) => {
+      console.log(data);
+
       userInfo.setUserInfo(data);
       }).catch((err) => { console.log(err); });
 
@@ -184,14 +187,14 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
             handleLikeClick: (cardId) => {
               if(cardElement._checkIfLiked()) {
                 const unsetLikePromise = appApi.unsetLike(cardId);
-    
+
                 unsetLikePromise.then((data) => {
                   cardElement._cardData = data;
                   cardElement._toggleLike(data.likes.length);
                 }).catch((err) => { console.log(err); });
               } else {
                 const setLikePromise = appApi.setLike(cardId);
-    
+
                 setLikePromise.then((data) => {
                   cardElement._cardData = data;
                   cardElement._toggleLike(data.likes.length);
