@@ -10,6 +10,7 @@ import Api from '../components/Api.js';
 import './index.css';
 
 
+
 /** All variables */
 const btnEditAvatar = document.querySelector('.profile__btn-edit-avatar');
 const btnEdit = document.querySelector('.profile__btn-edit');
@@ -17,7 +18,7 @@ const btnAdd = document.querySelector('.profile__btn-add');
 
 
 
-
+/** Object with methods to send and request all data on the server side. */
 const appApi = new Api({
   url: "https://mesto.nomoreparties.co/v1/cohort-16",
   headers: {
@@ -27,27 +28,25 @@ const appApi = new Api({
 });
 
 
-const getUserInfoPromise = appApi.getUserInfo();
-const getInitialCardsPromise = appApi.getInitialCards();
-
-
 
 /** Object with methods to get and set user profile data. */
+const getUserInfoPromise = appApi.getUserInfo();
+
 const userInfo = new UserInfo({
   name: '.profile__name', // Jacques-Yves Cousteau
   about: '.profile__about', // Sailor, researcher
   avatar: '.profile__avatar' // https://pictures.s3.yandex.net/frontend-developer/common/ava.jpg
-  // https://images.unsplash.com/photo-1590787996529-a542c86ca267?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2700&q=80
 });
 
 getUserInfoPromise.then((data) => {
-  userInfo.setUserInfo(data);
+    userInfo.setUserInfo(data);
   }).catch((err) => { console.log(err); });
 
 
 
-
 /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
+const getInitialCardsPromise = appApi.getInitialCards();
+
 getInitialCardsPromise.then((data) => {
   const cardList = new Section({
     items: data, // pass here array of objects from server
@@ -80,7 +79,7 @@ getInitialCardsPromise.then((data) => {
         handleCardDeletion: () => {
           const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
             submitForm: () => {
-              const deleteCardPromise = appApi.deleteCard(cardElement._id);
+              const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
 
               deleteCardPromise.then((data) => {
                 return cardElement._removeElement();
@@ -107,7 +106,6 @@ getInitialCardsPromise.then((data) => {
 /** Prepares popup window with form to edit user avatar. */
 const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
   submitForm: () => {
-    // profileWithAvatarForm._changeBtnState();
     profileWithAvatarForm._setBtnSaveText('Сохранение...');
 
     const newAvatarLink = profileWithAvatarForm._getInputValues();
@@ -116,7 +114,6 @@ const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
 
     setUserAvatarPromise.then((data) => {
         userInfo.setUserInfo(data);
-        // profileWithAvatarForm._restoreBtnState();
         profileWithAvatarForm._setBtnSaveText('Сохранить');
         profileWithAvatarForm.close();
       }).catch((err) => { console.log(err); });
@@ -130,7 +127,7 @@ profileWithAvatarForm.setEventListeners();
 
 /** Attaches 'click' event on the 'Edit Avatar' button. */
 btnEditAvatar.addEventListener('click', () => {
-  // profileWithAvatarForm.fillUpInputs(userInfo.getUserInfo());
+  // profileWithAvatarForm.fillUpInputs(userInfo.getUserInfo()); // разкомментить, если нужно, чтобы при редактировании авы ссыла заполнялась текущим значением
   profileWithAvatarForm.open();
 });
 
@@ -139,8 +136,7 @@ btnEditAvatar.addEventListener('click', () => {
 /** Prepares popup window with form to edit user profile. */
 const profileWithForm = new PopupWithForm('.form[name="profile"]', {
   submitForm: () => {
-    // profileWithForm._changeBtnState();
-    profileWithForm._setBtnSaveText('Сохранение...');
+    profileWithForm._setBtnSaveText('Загрузка...');
 
     const inputValues = profileWithForm._getInputValues();
 
@@ -148,7 +144,6 @@ const profileWithForm = new PopupWithForm('.form[name="profile"]', {
 
     setUserInfoPromise.then((data) => {
         userInfo.setUserInfo(data);
-        // profileWithForm._restoreBtnState();
         profileWithForm._setBtnSaveText('Сохранить');
         profileWithForm.close();
       }).catch((err) => { console.log(err); });
@@ -171,7 +166,6 @@ btnEdit.addEventListener('click', () => {
 /** Prepares popup window with form to add new card. */
 const cardWithForm = new PopupWithForm('.form[name="card"]', {
   submitForm: () => {
-    // cardWithForm._changeBtnState();
     cardWithForm._setBtnSaveText('Создание...');
 
     const inputValues = cardWithForm._getInputValues();
@@ -210,7 +204,7 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
             handleCardDeletion: () => {
               const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
                 submitForm: () => {
-                  const deleteCardPromise = appApi.deleteCard(cardElement._id);
+                  const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
 
                   deleteCardPromise.then((data) => {
                     return cardElement._removeElement();
@@ -230,7 +224,6 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
       }, '.elements');
 
       newCard.renderItems();
-      // cardWithForm._restoreBtnState();
       cardWithForm._setBtnSaveText('Создать');
       cardWithForm.close();
     }).catch((err) => { console.log(err); });
@@ -241,6 +234,8 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
 });
 
 cardWithForm.setEventListeners();
+
+
 
 /** Attaches 'click' event on the 'Add' button to popup window with creating card form. */
 btnAdd.addEventListener('click', () => { cardWithForm.open(); });

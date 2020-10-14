@@ -32,7 +32,6 @@ export default class Card {
 
   _toggleLike(totalLikes) {
     this._likeButton.classList.toggle('element__btn-like_clicked');
-    // this._totalLikes.textContent = this._cardData.likes.length;
     this._totalLikes.textContent = totalLikes;
   }
 
@@ -52,11 +51,9 @@ export default class Card {
     this._totalLikes.textContent = this._cardData.likes.length;
 
     cardImage.addEventListener('click', this._handleCardClick);
-    // this._likeButton.addEventListener('click', () => { this._toggleLike(); });
     this._likeButton.addEventListener('click', () => { this._handleLikeClick(this._cardData._id); });
 
     if(this._userInfo._id === this._cardData.owner._id) {
-      // removeButton.addEventListener('click', () => { this._removeElement(); });
       removeButton.addEventListener('click', () => { this._handleCardDeletion(); });
     } else {
       removeButton.remove();

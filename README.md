@@ -16,3 +16,4 @@
 * Адаптивный дизайн
 * JavaScript
 * OOP
+* API

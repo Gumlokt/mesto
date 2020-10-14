@@ -24,8 +24,6 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify(data),
     }).then((res) => {
-      console.log(res);
-
       if (res.ok) {
         return res.json();
       }
