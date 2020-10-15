@@ -5,15 +5,20 @@ export default class Api {
   }
 
 
+  _getResponseData(res, err) {
+    if (res.ok) {
+      return res.json();
+    }
+
+    return Promise.reject(new Error(`Ошибка: ${res.status}. ${err}`));
+  }
+
+
   getInitialCards() {
     return fetch(`${this._url}/cards`, {
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("Произошла ошибка, карточки не получены...");
+      return this._getResponseData(res, 'Карточки не получены...');
     });
   }
 
@@ -24,11 +29,7 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify(data),
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("Произошла ошибка, новая карточка не добавлена...");
+      return this._getResponseData(res, 'Новая карточка не добавлена...');
     });
   }
 
@@ -38,11 +39,7 @@ export default class Api {
       method: "DELETE",
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("Произошла ошибка, карточка не удалена...");
+      return this._getResponseData(res, 'Карточка не удалена...');
     });
   }
 
@@ -51,11 +48,7 @@ export default class Api {
     return fetch(`${this._url}/users/me`, {
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("Произошла ошибка, данные пользователя не получены...");
+      return this._getResponseData(res, 'Данные пользователя не получены...');
     });
   }
 
@@ -66,11 +59,7 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify(data),
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("Произошла ошибка, данные пользователя не обновлены...");
+      return this._getResponseData(res, 'Данные пользователя не обновлены...');
     });
   }
 
@@ -81,11 +70,7 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify(data),
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("Произошла ошибка, аватар пользователя не обновлён...");
+      return this._getResponseData(res, 'Аватар пользователя не обновлён...');
     });
   }
 
@@ -95,11 +80,7 @@ export default class Api {
       method: "PUT",
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("Произошла ошибка, лайк не поставлен...");
+      return this._getResponseData(res, 'Лайк не поставлен...');
     });
   }
 
@@ -109,11 +90,7 @@ export default class Api {
       method: "DELETE",
       headers: this._headers,
     }).then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject("Произошла ошибка, лайк не удалён...");
+      return this._getResponseData(res, 'Лайк не удалён...');
     });
 
   }

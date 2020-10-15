@@ -20,6 +20,7 @@ export default class Card {
 
   _removeElement() {
     this._card.remove();
+    this._card = null;
   }
 
 
@@ -47,7 +48,7 @@ export default class Card {
 
     cardTitle.textContent = this._cardData.name;
     cardImage.src = this._cardData.link;
-    cardImage.alt = 'Фото. ' + this._cardData.name;
+    cardImage.alt = `Фото. ${this._cardData.name}`;
     this._totalLikes.textContent = this._cardData.likes.length;
 
     cardImage.addEventListener('click', this._handleCardClick);

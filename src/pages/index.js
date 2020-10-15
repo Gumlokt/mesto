@@ -40,7 +40,7 @@ const userInfo = new UserInfo({
 
 getUserInfoPromise.then((data) => {
     userInfo.setUserInfo(data);
-  }).catch((err) => { console.log(err); });
+  }).catch((err) => { console.log(err.message); });
 
 
 
@@ -66,14 +66,14 @@ getInitialCardsPromise.then((data) => {
             unsetLikePromise.then((data) => {
               cardElement._cardData = data;
               cardElement._toggleLike(data.likes.length);
-            }).catch((err) => { console.log(err); });
+            }).catch((err) => { console.log(err.message); });
           } else {
             const setLikePromise = appApi.setLike(cardId);
 
             setLikePromise.then((data) => {
               cardElement._cardData = data;
               cardElement._toggleLike(data.likes.length);
-            }).catch((err) => { console.log(err); });
+            }).catch((err) => { console.log(err.message); });
           }
         },
         handleCardDeletion: () => {
@@ -83,7 +83,7 @@ getInitialCardsPromise.then((data) => {
 
               deleteCardPromise.then((data) => {
                 return cardElement._removeElement();
-              }).catch((err) => { console.log(err); });
+              }).catch((err) => { console.log(err.message); });
 
               popupConfirmDeletion.close();
             }
@@ -99,7 +99,7 @@ getInitialCardsPromise.then((data) => {
   }, '.elements');
 
   cardList.renderItems();
-}).catch((err) => { console.log(err); });
+}).catch((err) => { console.log(err.message); });
 
 
 
@@ -116,7 +116,7 @@ const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
         userInfo.setUserInfo(data);
         profileWithAvatarForm._setBtnSaveText('Сохранить');
         profileWithAvatarForm.close();
-      }).catch((err) => { console.log(err); });
+      }).catch((err) => { console.log(err.message); });
   },
   cssClasses: cssClasses,
   resetForm: resetForm,
@@ -146,7 +146,7 @@ const profileWithForm = new PopupWithForm('.form[name="profile"]', {
         userInfo.setUserInfo(data);
         profileWithForm._setBtnSaveText('Сохранить');
         profileWithForm.close();
-      }).catch((err) => { console.log(err); });
+      }).catch((err) => { console.log(err.message); });
   },
   cssClasses: cssClasses,
   resetForm: resetForm,
@@ -191,14 +191,14 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
                 unsetLikePromise.then((data) => {
                   cardElement._cardData = data;
                   cardElement._toggleLike(data.likes.length);
-                }).catch((err) => { console.log(err); });
+                }).catch((err) => { console.log(err.message); });
               } else {
                 const setLikePromise = appApi.setLike(cardId);
 
                 setLikePromise.then((data) => {
                   cardElement._cardData = data;
                   cardElement._toggleLike(data.likes.length);
-                }).catch((err) => { console.log(err); });
+                }).catch((err) => { console.log(err.message); });
               }
             },
             handleCardDeletion: () => {
@@ -208,7 +208,7 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
 
                   deleteCardPromise.then((data) => {
                     return cardElement._removeElement();
-                  }).catch((err) => { console.log(err); });
+                  }).catch((err) => { console.log(err.message); });
 
                   popupConfirmDeletion.close();
                 }
@@ -226,7 +226,7 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
       newCard.renderItems();
       cardWithForm._setBtnSaveText('Создать');
       cardWithForm.close();
-    }).catch((err) => { console.log(err); });
+    }).catch((err) => { console.log(err.message); });
   },
   cssClasses: cssClasses,
   resetForm: resetForm,
