@@ -1,4 +1,4 @@
-import { elementsArray } from '../utils/places.js';
+import { getBtnSaveText, getBtnCreateText } from '../utils/helpers.js';
 import { cssClasses, resetForm, toggleButtonState } from '../utils/validate.js';
 import Card from '../components/Card.js';
 import Section from '../components/Section.js';
@@ -54,10 +54,14 @@ getInitialCardsPromise.then((data) => {
       const cardElement = new Card({
         cardData: item,
         userInfo: userInfo.getUserInfo(),
-        handleCardClick: (e) => {
+        handleCardClick: () => { // клик по картинке
           const popupWithImage = new PopupWithImage('.popup__image-container');
           popupWithImage.setEventListeners();
-          popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+          popupWithImage.open({
+            link: item.link,
+            name: item.name.replace('Фото', 'Фото на весь экран'),
+            title: item.name
+          });
         },
         handleLikeClick: (cardId) => {
           if(cardElement._checkIfLiked()) {
@@ -106,7 +110,7 @@ getInitialCardsPromise.then((data) => {
 /** Prepares popup window with form to edit user avatar. */
 const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
   submitForm: () => {
-    profileWithAvatarForm._setBtnSaveText('Сохранение...');
+    profileWithAvatarForm.setBtnSaveText(getBtnSaveText(true));
 
     const newAvatarLink = profileWithAvatarForm._getInputValues();
 
@@ -114,7 +118,7 @@ const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
 
     setUserAvatarPromise.then((data) => {
         userInfo.setUserInfo(data);
-        profileWithAvatarForm._setBtnSaveText('Сохранить');
+        profileWithAvatarForm.setBtnSaveText(getBtnSaveText());
         profileWithAvatarForm.close();
       }).catch((err) => { console.log(err.message); });
   },
@@ -136,7 +140,7 @@ btnEditAvatar.addEventListener('click', () => {
 /** Prepares popup window with form to edit user profile. */
 const profileWithForm = new PopupWithForm('.form[name="profile"]', {
   submitForm: () => {
-    profileWithForm._setBtnSaveText('Загрузка...');
+    profileWithForm.setBtnSaveText(getBtnSaveText(true));
 
     const inputValues = profileWithForm._getInputValues();
 
@@ -144,7 +148,7 @@ const profileWithForm = new PopupWithForm('.form[name="profile"]', {
 
     setUserInfoPromise.then((data) => {
         userInfo.setUserInfo(data);
-        profileWithForm._setBtnSaveText('Сохранить');
+        profileWithForm.setBtnSaveText(getBtnSaveText());
         profileWithForm.close();
       }).catch((err) => { console.log(err.message); });
   },
@@ -166,7 +170,7 @@ btnEdit.addEventListener('click', () => {
 /** Prepares popup window with form to add new card. */
 const cardWithForm = new PopupWithForm('.form[name="card"]', {
   submitForm: () => {
-    cardWithForm._setBtnSaveText('Создание...');
+    cardWithForm.setBtnSaveText(getBtnCreateText(true));
 
     const inputValues = cardWithForm._getInputValues();
 
@@ -179,10 +183,14 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
           const cardElement = new Card({
             cardData: item,
             userInfo: userInfo.getUserInfo(),
-            handleCardClick: (e) => {
+            handleCardClick: () => { // клик по картинке
               const popupWithImage = new PopupWithImage('.popup__image-container');
               popupWithImage.setEventListeners();
-              popupWithImage.open(e); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+              popupWithImage.open({
+                link: item.link,
+                name: item.name.replace('Фото', 'Фото на весь экран'),
+                title: item.name
+              });
             },
             handleLikeClick: (cardId) => {
               if(cardElement._checkIfLiked()) {
@@ -224,7 +232,7 @@ const cardWithForm = new PopupWithForm('.form[name="card"]', {
       }, '.elements');
 
       newCard.renderItems();
-      cardWithForm._setBtnSaveText('Создать');
+      cardWithForm.setBtnSaveText(getBtnCreateText());
       cardWithForm.close();
     }).catch((err) => { console.log(err.message); });
   },
