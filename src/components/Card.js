@@ -31,7 +31,7 @@ export default class Card {
   }
 
 
-  _toggleLike(totalLikes) {
+  toggleLike(totalLikes) {
     this._likeButton.classList.toggle('element__btn-like_clicked');
     this._totalLikes.textContent = totalLikes;
   }
@@ -61,7 +61,7 @@ export default class Card {
     }
 
     if(this._checkIfLiked()) {
-      this._toggleLike(this._cardData.likes.length);
+      this.toggleLike(this._cardData.likes.length);
     }
 
     return this._card;

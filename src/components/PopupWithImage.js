@@ -9,11 +9,11 @@ export default class PopupWithImage extends Popup {
   }
 
 
-  open({ link, name, title }) {
+  open(card) {
     super.open();
 
-    this._popupImage.src = link;
-    this._popupImage.alt = name;
-    this._popupImageTitle.textContent = title;
+    this._popupImageTitle.textContent = card.name;
+    this._popupImage.src = card.link;
+    this._popupImage.alt = card.name.replace('Фото', 'Фото на весь экран');
   }
 }

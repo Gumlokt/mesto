@@ -11,6 +11,6 @@ export const getBtnCreateText = (isLoading = false) => {
   if (isLoading) {
     return 'Создание...';
   }
-
+  
   return 'Создать';
 }

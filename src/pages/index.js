@@ -18,6 +18,21 @@ const btnAdd = document.querySelector('.profile__btn-add');
 
 
 
+/** Object with methods to open popup with image. */
+const popupWithImage = new PopupWithImage('.popup__image-container');
+popupWithImage.setEventListeners();
+
+
+
+/** Object with methods to get and set user profile data. */
+const userInfo = new UserInfo({
+  name: '.profile__name', // Jacques-Yves Cousteau
+  about: '.profile__about', // Sailor, researcher
+  avatar: '.profile__avatar' // https://pictures.s3.yandex.net/frontend-developer/common/ava.jpg
+});
+
+
+
 /** Object with methods to send and request all data on the server side. */
 const appApi = new Api({
   url: "https://mesto.nomoreparties.co/v1/cohort-16",
@@ -29,221 +44,206 @@ const appApi = new Api({
 
 
 
-/** Object with methods to get and set user profile data. */
-const getUserInfoPromise = appApi.getUserInfo();
+// const getUserInfoPromise = appApi.getUserInfo();
+// const getInitialCardsPromise = appApi.getInitialCards();
 
-const userInfo = new UserInfo({
-  name: '.profile__name', // Jacques-Yves Cousteau
-  about: '.profile__about', // Sailor, researcher
-  avatar: '.profile__avatar' // https://pictures.s3.yandex.net/frontend-developer/common/ava.jpg
-});
+Promise.all([ //в Promise.all передаем массив промисов которые нужно выполнить
+  appApi.getUserInfo(),
+  appApi.getInitialCards()
+])    
+.then((values) => { //попадаем сюда когда оба промиса будут выполнены
+  const [userData, initialCards] = values;
 
-getUserInfoPromise.then((data) => {
-    userInfo.setUserInfo(data);
-  }).catch((err) => { console.log(err.message); });
+  userInfo.setUserInfo(userData);
 
+  /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
+    const cardList = new Section({
+      cardsList: initialCards, // pass here array of objects from server
+      renderer: (card) => {
+        const cardElement = new Card({
+          cardData: card,
+          userInfo: userInfo.getUserInfo(),
+          handleCardClick: () => { // клик по картинке
+            popupWithImage.open(card);
+          },
+          handleLikeClick: (cardId) => {
+            if(cardElement._checkIfLiked()) {
+              const unsetLikePromise = appApi.unsetLike(cardId);
 
-
-/** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
-const getInitialCardsPromise = appApi.getInitialCards();
-
-getInitialCardsPromise.then((data) => {
-  const cardList = new Section({
-    items: data, // pass here array of objects from server
-    renderer: (item) => {
-      const cardElement = new Card({
-        cardData: item,
-        userInfo: userInfo.getUserInfo(),
-        handleCardClick: () => { // клик по картинке
-          const popupWithImage = new PopupWithImage('.popup__image-container');
-          popupWithImage.setEventListeners();
-          popupWithImage.open({
-            link: item.link,
-            name: item.name.replace('Фото', 'Фото на весь экран'),
-            title: item.name
-          });
-        },
-        handleLikeClick: (cardId) => {
-          if(cardElement._checkIfLiked()) {
-            const unsetLikePromise = appApi.unsetLike(cardId);
-
-            unsetLikePromise.then((data) => {
-              cardElement._cardData = data;
-              cardElement._toggleLike(data.likes.length);
-            }).catch((err) => { console.log(err.message); });
-          } else {
-            const setLikePromise = appApi.setLike(cardId);
-
-            setLikePromise.then((data) => {
-              cardElement._cardData = data;
-              cardElement._toggleLike(data.likes.length);
-            }).catch((err) => { console.log(err.message); });
-          }
-        },
-        handleCardDeletion: () => {
-          const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
-            submitForm: () => {
-              const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
-
-              deleteCardPromise.then((data) => {
-                return cardElement._removeElement();
+              unsetLikePromise.then((data) => {
+                cardElement._cardData = data;
+                cardElement.toggleLike(data.likes.length);
               }).catch((err) => { console.log(err.message); });
+            } else {
+              const setLikePromise = appApi.setLike(cardId);
 
-              popupConfirmDeletion.close();
+              setLikePromise.then((data) => {
+                cardElement._cardData = data;
+                cardElement.toggleLike(data.likes.length);
+              }).catch((err) => { console.log(err.message); });
             }
-          });
+          },
+          handleCardDeletion: () => {
+            const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
+              submitForm: () => {
+                const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
 
-          popupConfirmDeletion.setEventListeners();
-          popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
-        }
-      }, '#element');
-
-      cardList.appendItem(cardElement.createCard());
-    }
-  }, '.elements');
-
-  cardList.renderItems();
-}).catch((err) => { console.log(err.message); });
-
-
-
-/** Prepares popup window with form to edit user avatar. */
-const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
-  submitForm: () => {
-    profileWithAvatarForm.setBtnSaveText(getBtnSaveText(true));
-
-    const newAvatarLink = profileWithAvatarForm._getInputValues();
-
-    const setUserAvatarPromise = appApi.setAvatar(newAvatarLink);
-
-    setUserAvatarPromise.then((data) => {
-        userInfo.setUserInfo(data);
-        profileWithAvatarForm.setBtnSaveText(getBtnSaveText());
-        profileWithAvatarForm.close();
-      }).catch((err) => { console.log(err.message); });
-  },
-  cssClasses: cssClasses,
-  resetForm: resetForm,
-  toggleButtonState: toggleButtonState
-});
-
-profileWithAvatarForm.setEventListeners();
-
-/** Attaches 'click' event on the 'Edit Avatar' button. */
-btnEditAvatar.addEventListener('click', () => {
-  // profileWithAvatarForm.fillUpInputs(userInfo.getUserInfo()); // разкомментить, если нужно, чтобы при редактировании авы ссыла заполнялась текущим значением
-  profileWithAvatarForm.open();
-});
-
-
-
-/** Prepares popup window with form to edit user profile. */
-const profileWithForm = new PopupWithForm('.form[name="profile"]', {
-  submitForm: () => {
-    profileWithForm.setBtnSaveText(getBtnSaveText(true));
-
-    const inputValues = profileWithForm._getInputValues();
-
-    const setUserInfoPromise = appApi.setUserInfo(inputValues);
-
-    setUserInfoPromise.then((data) => {
-        userInfo.setUserInfo(data);
-        profileWithForm.setBtnSaveText(getBtnSaveText());
-        profileWithForm.close();
-      }).catch((err) => { console.log(err.message); });
-  },
-  cssClasses: cssClasses,
-  resetForm: resetForm,
-  toggleButtonState: toggleButtonState
-});
-
-profileWithForm.setEventListeners();
-
-/** Attaches 'click' event on the 'Edit' button. */
-btnEdit.addEventListener('click', () => {
-  profileWithForm.fillUpInputs(userInfo.getUserInfo());
-  profileWithForm.open();
-});
-
-
-
-/** Prepares popup window with form to add new card. */
-const cardWithForm = new PopupWithForm('.form[name="card"]', {
-  submitForm: () => {
-    cardWithForm.setBtnSaveText(getBtnCreateText(true));
-
-    const inputValues = cardWithForm._getInputValues();
-
-    const addCardPromiese = appApi.addCard(inputValues);
-
-    addCardPromiese.then((data) => {
-      const newCard = new Section({
-        items: [ data ],
-        renderer: (item) => {
-          const cardElement = new Card({
-            cardData: item,
-            userInfo: userInfo.getUserInfo(),
-            handleCardClick: () => { // клик по картинке
-              const popupWithImage = new PopupWithImage('.popup__image-container');
-              popupWithImage.setEventListeners();
-              popupWithImage.open({
-                link: item.link,
-                name: item.name.replace('Фото', 'Фото на весь экран'),
-                title: item.name
-              });
-            },
-            handleLikeClick: (cardId) => {
-              if(cardElement._checkIfLiked()) {
-                const unsetLikePromise = appApi.unsetLike(cardId);
-
-                unsetLikePromise.then((data) => {
-                  cardElement._cardData = data;
-                  cardElement._toggleLike(data.likes.length);
-                }).catch((err) => { console.log(err.message); });
-              } else {
-                const setLikePromise = appApi.setLike(cardId);
-
-                setLikePromise.then((data) => {
-                  cardElement._cardData = data;
-                  cardElement._toggleLike(data.likes.length);
+                deleteCardPromise.then((data) => {
+                  popupConfirmDeletion.close();
+                  return cardElement._removeElement();
                 }).catch((err) => { console.log(err.message); });
               }
-            },
-            handleCardDeletion: () => {
-              const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
-                submitForm: () => {
-                  const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
+            });
 
-                  deleteCardPromise.then((data) => {
-                    return cardElement._removeElement();
+            popupConfirmDeletion.setEventListeners();
+            popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+          }
+        }, '#element');
+
+        cardList.appendItem(cardElement.createCard());
+      }
+    }, '.elements');
+
+    cardList.renderItems();
+
+
+
+  /** Prepares popup window with form to edit user avatar. */
+  const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
+    submitForm: (inputValues) => {
+      profileWithAvatarForm.setBtnSaveText(getBtnSaveText(true));
+
+      // const inputValues = profileWithAvatarForm._getInputValues();
+
+      const setUserAvatarPromise = appApi.setAvatar(inputValues);
+
+      setUserAvatarPromise.then((data) => {
+          userInfo.setUserInfo(data);
+          profileWithAvatarForm.setBtnSaveText(getBtnSaveText());
+          profileWithAvatarForm.close();
+        }).catch((err) => { console.log(err.message); });
+    },
+    cssClasses: cssClasses,
+    resetForm: resetForm,
+    toggleButtonState: toggleButtonState
+  });
+
+  profileWithAvatarForm.setEventListeners();
+
+  /** Attaches 'click' event on the 'Edit Avatar' button. */
+  btnEditAvatar.addEventListener('click', () => {
+    // profileWithAvatarForm.fillUpInputs(userInfo.getUserInfo()); // разкомментить, если нужно, чтобы при редактировании авы ссыла заполнялась текущим значением
+    profileWithAvatarForm.open();
+  });
+
+
+
+  /** Prepares popup window with form to edit user profile. */
+  const profileWithForm = new PopupWithForm('.form[name="profile"]', {
+    submitForm: (inputValues) => {
+      profileWithForm.setBtnSaveText(getBtnSaveText(true));
+
+      // const inputValues = profileWithForm._getInputValues();
+
+      const setUserInfoPromise = appApi.setUserInfo(inputValues);
+
+      setUserInfoPromise.then((data) => {
+          userInfo.setUserInfo(data);
+          profileWithForm.setBtnSaveText(getBtnSaveText());
+          profileWithForm.close();
+        }).catch((err) => { console.log(err.message); });
+    },
+    cssClasses: cssClasses,
+    resetForm: resetForm,
+    toggleButtonState: toggleButtonState
+  });
+
+  profileWithForm.setEventListeners();
+
+  /** Attaches 'click' event on the 'Edit' button. */
+  btnEdit.addEventListener('click', () => {
+    profileWithForm.fillUpInputs(userInfo.getUserInfo());
+    profileWithForm.open();
+  });
+
+
+
+  /** Prepares popup window with form to add new card. */
+  const cardWithForm = new PopupWithForm('.form[name="card"]', {
+    submitForm: (inputValues) => {
+      cardWithForm.setBtnSaveText(getBtnCreateText(true));
+
+      // const inputValues = cardWithForm._getInputValues();
+
+      const addCardPromiese = appApi.addCard(inputValues);
+
+      addCardPromiese.then((data) => {
+        const newCard = new Section({
+          cardsList: [ data ],
+          renderer: (card) => {
+            const cardElement = new Card({
+              cardData: card,
+              userInfo: userInfo.getUserInfo(),
+              handleCardClick: () => { // клик по картинке
+                popupWithImage.open(card);
+              },
+              handleLikeClick: (cardId) => {
+                if(cardElement._checkIfLiked()) {
+                  const unsetLikePromise = appApi.unsetLike(cardId);
+
+                  unsetLikePromise.then((data) => {
+                    cardElement._cardData = data;
+                    cardElement.toggleLike(data.likes.length);
                   }).catch((err) => { console.log(err.message); });
+                } else {
+                  const setLikePromise = appApi.setLike(cardId);
 
-                  popupConfirmDeletion.close();
+                  setLikePromise.then((data) => {
+                    cardElement._cardData = data;
+                    cardElement.toggleLike(data.likes.length);
+                  }).catch((err) => { console.log(err.message); });
                 }
-              });
+              },
+              handleCardDeletion: () => {
+                const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
+                  submitForm: () => {
+                    const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
 
-              popupConfirmDeletion.setEventListeners();
-              popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
-            }
-          }, '#element');
+                    deleteCardPromise.then((data) => {
+                      popupConfirmDeletion.close();
+                      return cardElement._removeElement();
+                    }).catch((err) => { console.log(err.message); });
+                  }
+                });
 
-          newCard.prependItem(cardElement.createCard());
-        }
-      }, '.elements');
+                popupConfirmDeletion.setEventListeners();
+                popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+              }
+            }, '#element');
 
-      newCard.renderItems();
-      cardWithForm.setBtnSaveText(getBtnCreateText());
-      cardWithForm.close();
-    }).catch((err) => { console.log(err.message); });
-  },
-  cssClasses: cssClasses,
-  resetForm: resetForm,
-  toggleButtonState: toggleButtonState
-});
+            newCard.prependItem(cardElement.createCard());
+          }
+        }, '.elements');
 
-cardWithForm.setEventListeners();
+        newCard.renderItems();
+        cardWithForm.setBtnSaveText(getBtnCreateText());
+        cardWithForm.close();
+      }).catch((err) => { console.log(err.message); });
+    },
+    cssClasses: cssClasses,
+    resetForm: resetForm,
+    toggleButtonState: toggleButtonState
+  });
+
+  cardWithForm.setEventListeners();
 
 
 
-/** Attaches 'click' event on the 'Add' button to popup window with creating card form. */
-btnAdd.addEventListener('click', () => { cardWithForm.open(); });
+  /** Attaches 'click' event on the 'Add' button to popup window with creating card form. */
+  btnAdd.addEventListener('click', () => { cardWithForm.open(); });
+})
+.catch((err) => { //попадаем сюда если один из промисов завершаться ошибкой
+  console.log(err.message);
+})
+
+
