@@ -72,10 +72,10 @@ const generateCardElement = (card) => {
         }).catch((err) => { console.log(err.message); });
       }
     },
-    handleCardDeletion: () => {
+    handleCardDeletion: (cardId) => {
       const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
         submitForm: () => {
-          const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
+          const deleteCardPromise = appApi.deleteCard(cardId);
 
           deleteCardPromise.then((data) => {
             popupConfirmDeletion.close();
@@ -85,7 +85,7 @@ const generateCardElement = (card) => {
       });
 
       popupConfirmDeletion.setEventListeners();
-      popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+      popupConfirmDeletion.open();
     }
   }, '#element');
 
@@ -126,10 +126,8 @@ Promise.all([ //в Promise.all передаем массив промисов к
 
   /** Prepares popup window with form to edit user avatar. */
   const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
-    submitForm: () => {
+    submitForm: (inputValues) => {
       profileWithAvatarForm.setBtnSaveText(getBtnSaveText(true));
-
-      const inputValues = profileWithAvatarForm._getInputValues();
 
       const setUserAvatarPromise = appApi.setAvatar(inputValues);
 
@@ -156,10 +154,8 @@ Promise.all([ //в Promise.all передаем массив промисов к
 
   /** Prepares popup window with form to edit user profile. */
   const profileWithForm = new PopupWithForm('.form[name="profile"]', {
-    submitForm: () => {
+    submitForm: (inputValues) => {
       profileWithForm.setBtnSaveText(getBtnSaveText(true));
-
-      const inputValues = profileWithForm._getInputValues();
 
       const setUserInfoPromise = appApi.setUserInfo(inputValues);
 
@@ -186,10 +182,8 @@ Promise.all([ //в Promise.all передаем массив промисов к
 
   /** Prepares popup window with form to add new card. */
   const cardWithForm = new PopupWithForm('.form[name="card"]', {
-    submitForm: () => {
+    submitForm: (inputValues) => {
       cardWithForm.setBtnSaveText(getBtnCreateText(true));
-
-      const inputValues = cardWithForm._getInputValues();
 
       const addCardPromiese = appApi.addCard(inputValues);
 

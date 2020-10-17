@@ -55,7 +55,7 @@ export default class Card {
     this._likeButton.addEventListener('click', () => { this._handleLikeClick(this._cardData._id); });
 
     if(this._userInfo._id === this._cardData.owner._id) {
-      removeButton.addEventListener('click', () => { this._handleCardDeletion(); });
+      removeButton.addEventListener('click', () => { this._handleCardDeletion(this._cardData._id); });
     } else {
       removeButton.remove();
     }
