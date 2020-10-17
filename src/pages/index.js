@@ -44,76 +44,92 @@ const appApi = new Api({
 
 
 
-// const getUserInfoPromise = appApi.getUserInfo();
-// const getInitialCardsPromise = appApi.getInitialCards();
+/**
+ * Generates card element.
+ * @param {object} card - The response from server with all nessesary data to create new card.
+ */
+const generateCardElement = (card) => {
+  const cardElement = new Card({
+    cardData: card,
+    userInfo: userInfo.getUserInfo(),
+    handleCardClick: () => { // клик по картинке
+      popupWithImage.open(card);
+    },
+    handleLikeClick: (cardId) => {
+      if(cardElement._checkIfLiked()) {
+        const unsetLikePromise = appApi.unsetLike(cardId);
+
+        unsetLikePromise.then((data) => {
+          cardElement._cardData = data;
+          cardElement.toggleLike(data.likes.length);
+        }).catch((err) => { console.log(err.message); });
+      } else {
+        const setLikePromise = appApi.setLike(cardId);
+
+        setLikePromise.then((data) => {
+          cardElement._cardData = data;
+          cardElement.toggleLike(data.likes.length);
+        }).catch((err) => { console.log(err.message); });
+      }
+    },
+    handleCardDeletion: () => {
+      const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
+        submitForm: () => {
+          const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
+
+          deleteCardPromise.then((data) => {
+            popupConfirmDeletion.close();
+            return cardElement._removeElement();
+          }).catch((err) => { console.log(err.message); });
+        }
+      });
+
+      popupConfirmDeletion.setEventListeners();
+      popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
+    }
+  }, '#element');
+
+  return cardElement;
+}
+
+
 
 Promise.all([ //в Promise.all передаем массив промисов которые нужно выполнить
   appApi.getUserInfo(),
   appApi.getInitialCards()
-])    
+])
 .then((values) => { //попадаем сюда когда оба промиса будут выполнены
   const [userData, initialCards] = values;
 
   userInfo.setUserInfo(userData);
 
+
+
   /** Fills up the page with predefined cards (or with predefined elements in BEM notation). */
-    const cardList = new Section({
-      cardsList: initialCards, // pass here array of objects from server
-      renderer: (card) => {
-        const cardElement = new Card({
-          cardData: card,
-          userInfo: userInfo.getUserInfo(),
-          handleCardClick: () => { // клик по картинке
-            popupWithImage.open(card);
-          },
-          handleLikeClick: (cardId) => {
-            if(cardElement._checkIfLiked()) {
-              const unsetLikePromise = appApi.unsetLike(cardId);
+  const cardList = new Section({
+    cardsList: initialCards, // pass here array of objects from server
+    /**
+     * Renderes cards on the page.
+     * @param {object} card - The response from server with all nessesary data to create new card.
+     * @param {boolean} append - The true means append item to DOM, false - prepend.
+     */
+    renderer: (card, append) => {
+      const cardElement = generateCardElement(card); // generateCardElement() returns DOM-node
+      append ? cardList.appendItem(cardElement.createCard())
+             : cardList.prependItem(cardElement.createCard());
+    }
+  }, '.elements');
 
-              unsetLikePromise.then((data) => {
-                cardElement._cardData = data;
-                cardElement.toggleLike(data.likes.length);
-              }).catch((err) => { console.log(err.message); });
-            } else {
-              const setLikePromise = appApi.setLike(cardId);
-
-              setLikePromise.then((data) => {
-                cardElement._cardData = data;
-                cardElement.toggleLike(data.likes.length);
-              }).catch((err) => { console.log(err.message); });
-            }
-          },
-          handleCardDeletion: () => {
-            const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
-              submitForm: () => {
-                const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
-
-                deleteCardPromise.then((data) => {
-                  popupConfirmDeletion.close();
-                  return cardElement._removeElement();
-                }).catch((err) => { console.log(err.message); });
-              }
-            });
-
-            popupConfirmDeletion.setEventListeners();
-            popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
-          }
-        }, '#element');
-
-        cardList.appendItem(cardElement.createCard());
-      }
-    }, '.elements');
-
-    cardList.renderItems();
+  cardList.renderItems();
 
 
 
   /** Prepares popup window with form to edit user avatar. */
   const profileWithAvatarForm = new PopupWithForm('.form[name="avatar"]', {
-    submitForm: (inputValues) => {
+    submitForm: () => {
       profileWithAvatarForm.setBtnSaveText(getBtnSaveText(true));
 
-      // const inputValues = profileWithAvatarForm._getInputValues();
+      const inputValues = profileWithAvatarForm._getInputValues();
 
       const setUserAvatarPromise = appApi.setAvatar(inputValues);
 
@@ -140,10 +156,10 @@ Promise.all([ //в Promise.all передаем массив промисов к
 
   /** Prepares popup window with form to edit user profile. */
   const profileWithForm = new PopupWithForm('.form[name="profile"]', {
-    submitForm: (inputValues) => {
+    submitForm: () => {
       profileWithForm.setBtnSaveText(getBtnSaveText(true));
 
-      // const inputValues = profileWithForm._getInputValues();
+      const inputValues = profileWithForm._getInputValues();
 
       const setUserInfoPromise = appApi.setUserInfo(inputValues);
 
@@ -170,62 +186,16 @@ Promise.all([ //в Promise.all передаем массив промисов к
 
   /** Prepares popup window with form to add new card. */
   const cardWithForm = new PopupWithForm('.form[name="card"]', {
-    submitForm: (inputValues) => {
+    submitForm: () => {
       cardWithForm.setBtnSaveText(getBtnCreateText(true));
 
-      // const inputValues = cardWithForm._getInputValues();
+      const inputValues = cardWithForm._getInputValues();
 
       const addCardPromiese = appApi.addCard(inputValues);
 
       addCardPromiese.then((data) => {
-        const newCard = new Section({
-          cardsList: [ data ],
-          renderer: (card) => {
-            const cardElement = new Card({
-              cardData: card,
-              userInfo: userInfo.getUserInfo(),
-              handleCardClick: () => { // клик по картинке
-                popupWithImage.open(card);
-              },
-              handleLikeClick: (cardId) => {
-                if(cardElement._checkIfLiked()) {
-                  const unsetLikePromise = appApi.unsetLike(cardId);
+        cardList.addItem(data);
 
-                  unsetLikePromise.then((data) => {
-                    cardElement._cardData = data;
-                    cardElement.toggleLike(data.likes.length);
-                  }).catch((err) => { console.log(err.message); });
-                } else {
-                  const setLikePromise = appApi.setLike(cardId);
-
-                  setLikePromise.then((data) => {
-                    cardElement._cardData = data;
-                    cardElement.toggleLike(data.likes.length);
-                  }).catch((err) => { console.log(err.message); });
-                }
-              },
-              handleCardDeletion: () => {
-                const popupConfirmDeletion = new PopupWithSubmit('.form[name="confirmation"]', {
-                  submitForm: () => {
-                    const deleteCardPromise = appApi.deleteCard(cardElement._cardData._id);
-
-                    deleteCardPromise.then((data) => {
-                      popupConfirmDeletion.close();
-                      return cardElement._removeElement();
-                    }).catch((err) => { console.log(err.message); });
-                  }
-                });
-
-                popupConfirmDeletion.setEventListeners();
-                popupConfirmDeletion.open(); // e - это элемент, на котором произошло событие (в данном случае клик по картинке)
-              }
-            }, '#element');
-
-            newCard.prependItem(cardElement.createCard());
-          }
-        }, '.elements');
-
-        newCard.renderItems();
         cardWithForm.setBtnSaveText(getBtnCreateText());
         cardWithForm.close();
       }).catch((err) => { console.log(err.message); });
@@ -245,5 +215,3 @@ Promise.all([ //в Promise.all передаем массив промисов к
 .catch((err) => { //попадаем сюда если один из промисов завершаться ошибкой
   console.log(err.message);
 })
-
-

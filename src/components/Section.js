@@ -18,7 +18,12 @@ export default class Section {
 
   renderItems() {
     this._cardsList.forEach((card) => {
-      this._renderer(card);
+      this._renderer(card, true); // true means append item, false - prepend
     });
+  }
+
+
+  addItem(card) {
+    this._renderer(card, false);
   }
 }
